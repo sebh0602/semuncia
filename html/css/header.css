@@ -1,0 +1,44 @@
+#header{
+	background-color: #000888;
+	color:white;
+	user-select: none;
+
+	width:98%;
+	height:7vh;
+	min-height:48px;
+	padding-left: 1%;
+	padding-right: 1%;
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+#header > div{
+	font-size: 1.5em; /*1em = 16px*/
+}
+
+#header > div:not(#title){
+	width:40px;
+}
+
+#header > #showSideNavDiv{
+	height: 7vh;
+	width:7vh;
+	min-height: 48px;
+	min-width: 48px;
+	cursor: pointer;
+}
+
+#header > #title{
+	font-size: 2.5em;
+}
+
+@media screen and (max-width:499px){
+	#header > #title{
+		font-size: 2em;
+	}
+	#header > div{
+		font-size: 1em;
+	}
+}

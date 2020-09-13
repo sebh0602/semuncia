@@ -1,0 +1,83 @@
+{
+    "initialAmount": 249315,
+    "transactions": {
+        "2016-07-18": [
+            {
+                "date": "2016-07-18",
+                "type": "-",
+                "amount": 32697,
+                "title": "Huawei P9 Lite + Zubeh\u00f6r",
+                "categories": [
+                    "Technik"
+                ]
+            }
+        ],
+        "2016-07-21": [
+            {
+                "date": "2016-07-21",
+                "type": "+",
+                "amount": 5000,
+                "title": "Zeugnis (Opa?)",
+                "categories": [
+                    "Geschenk"
+                ]
+            }
+        ],
+        "2016-07-23": [
+            {
+                "date": "2016-07-23",
+                "type": "+",
+                "amount": 2000,
+                "title": "Oma Handyhilfe",
+                "categories": []
+            }
+        ],
+        "2016-07-26": [
+            {
+                "date": "2016-07-26",
+                "type": "-",
+                "amount": 1000,
+                "title": "Matthias Guthaben",
+                "categories": []
+            }
+        ],
+        "2016-07-28": [
+            {
+                "date": "2016-07-28",
+                "type": "-",
+                "amount": 1910,
+                "title": "Kino mit Tim",
+                "categories": []
+            }
+        ],
+        "2016-07-31": [
+            {
+                "date": "2016-07-31",
+                "type": "+",
+                "amount": 1000,
+                "title": "Matthias Guthaben",
+                "categories": []
+            }
+        ],
+        "2016-08-01": [
+            {
+                "date": "2016-08-01",
+                "type": "+",
+                "amount": 9000,
+                "title": "Monthly Income",
+                "categories": []
+            }
+        ]
+    },
+    "recurringTransactions": [
+        {
+            "recurUnit": "month",
+            "recurPeriod": 1,
+            "type": "+",
+            "amount": 0,
+            "title": "Monthly Income",
+            "categories": [],
+            "startDate": "2020-09-01"
+        }
+    ]
+}
