@@ -1,0 +1,17 @@
+#addTransactionHoverButton{
+	width:75px;
+	height:75px;
+	border-radius: 37.5px;
+	position: fixed;
+	bottom:25px;
+	right:25px;
+	background-color:#000888;
+	color:#FFFFFF;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#addTransactionHoverButton > div{
+	font-size: 3em;
+}
