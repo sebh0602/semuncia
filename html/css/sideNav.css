@@ -1,0 +1,49 @@
+#sideNav{
+	position: fixed;
+	left:0;
+	top:0;
+	z-index: 20;
+	height: 100%;
+	width:100%;
+
+	display:none;
+	transition: 0.5s;
+	background-color: rgba(0,0,0,0.0);
+}
+
+#sideNav > #nav{
+	background-color: white;
+	width:0;
+	height: 100%;
+	overflow-y:auto;
+	transition: 0.5s;
+}
+
+#sideNav > #nav > #sideNavHeader{
+	display: flex;
+	justify-content: space-between;
+	background-color: #a9bcd0;
+	border-bottom: 1px solid #1e2749;
+}
+
+#sideNav > #nav > #sideNavHeader > div{
+	height: 50px;
+	width:50px;
+}
+
+#sideNav > #nav > #sideNavHeader > div > img{
+	padding-left: 10px;
+	padding-top:5px;
+	padding-bottom: 5px;
+}
+
+#sideNav > #nav > #sideNavHeader > div:nth-child(2){
+	cursor:pointer;
+}
+
+#sideNav > #nav > div:not(#sideNavHeader){
+	font-size: 2em;
+	padding-left: 10px;
+	border-bottom: 1px solid #1e2749;
+	background-color: white;
+}
