@@ -58,3 +58,7 @@
 	height:0px;
 	overflow: hidden;
 }
+
+#sideNav .sideNavDropDown > #transactionsFileInput{
+	display: none;
+}

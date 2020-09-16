@@ -92,7 +92,8 @@
 				<div onclick="switchDisplay('graphDisplay'); toggleSideNav();">Graphs</div>
 				<div onclick="switchDisplay('transactionsDisplay'); toggleSideNav();">Transactions</div>
 				<div class="sideNavDropDown" onclick="toggleSideNavDropDown()">&#9663; Import/Export
-					<div onclick="event.stopPropagation(); importJSON(); toggleSideNav();" class="sideNavDropDownChild">Import</div>
+					<div onclick="toggleSideNavDropDown(); document.getElementById('transactionsFileInput').click(); toggleSideNav();" class="sideNavDropDownChild">Import</div>
+					<input type="file" onchange="importJSON()" id="transactionsFileInput" accept=".json">
 					<div onclick="event.stopPropagation(); exportJSON(); toggleSideNav();" class="sideNavDropDownChild">Export</div>
 				</div>
 				<div onclick="switchDisplay('settingsDisplay'); toggleSideNav();">Settings</div>
