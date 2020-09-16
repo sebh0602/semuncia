@@ -1,18 +1,27 @@
-function toggleSideNav(){
-	if (document.getElementById("sideNav").style.display == "none" || document.getElementById("sideNav").style.display == ""){
-		document.getElementById("sideNav").style.display = "block";
-		setTimeout(function(){
-			document.getElementById("sideNav").style.backgroundColor = "rgba(0,0,0,0.5)";
-			document.getElementById("nav").style.width = "300px";
-		},20);
+var localData = {};
+
+function init(){
+	if (localStorage.config != undefined){
+		localData.config = JSON.parse(localStorage.config);
 	} else{
-		document.getElementById("nav").style.width = "0px";
-		document.getElementById("sideNav").style.backgroundColor = "rgba(0,0,0,0.0)";
-		setTimeout(function(){
-			document.getElementById("sideNav").style.display = "none";
-		}, 500);
+		localData.config = {
+			currentDisplay:"statsDisplay"
+		};
+		saveLocalData();
 	}
+	switchDisplay(localData.config.currentDisplay);
 }
 
+function saveLocalData(){
+	localStorage.config = JSON.stringify(localData.config);
+}
 
-//toggleSideNav();
+function importJSON(){
+	alert("import");
+}
+
+function exportJSON(){
+	alert("export");
+}
+
+init();

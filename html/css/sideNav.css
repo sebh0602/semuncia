@@ -46,4 +46,15 @@
 	padding-left: 10px;
 	border-bottom: 1px solid #1e2749;
 	background-color: white;
+	cursor:pointer;
+	white-space: nowrap;
+}
+
+#sideNav .sideNavDropDown > div{
+	/*border-top: 1px solid #1e2749;*/
+	padding-left: 15px;
+	margin-left: 20px;
+	transition: 0.5s;
+	height:0px;
+	overflow: hidden;
 }

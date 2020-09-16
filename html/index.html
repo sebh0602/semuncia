@@ -24,8 +24,13 @@
 	<link rel="stylesheet" type="text/css" href="css/app.css">
 	<link rel="stylesheet" type="text/css" href="css/header.css">
 	<link rel="stylesheet" type="text/css" href="css/sideNav.css">
+	<link rel="stylesheet" type="text/css" href="css/statsDisplay.css">
+	<link rel="stylesheet" type="text/css" href="css/graphDisplay.css">
+	<link rel="stylesheet" type="text/css" href="css/transactionsDisplay.css">
+	<link rel="stylesheet" type="text/css" href="css/settingsDisplay.css">
 	<link rel="stylesheet" type="text/css" href="css/addTransaction.css">
 
+	<script src="js/UIChanges.js" defer></script>
 	<script src="js/semunciaMain.js" defer></script>
 
 	<!--This is for the stupid IE-Detection thing to work-->
@@ -82,17 +87,31 @@
 						</svg>
 					</div>
 				</div>
-				<div>€ 1234.56,-</div>
-				<div>Statistics</div>
-				<div>Graphs</div>
-				<div>Transactions</div>
-				<div>Import/Export</div>
-				<div>Settings</div>
+				<div onclick="switchDisplay('statsDisplay'); toggleSideNav();">€ 1234.56,-</div>
+				<div onclick="switchDisplay('statsDisplay'); toggleSideNav();">Statistics</div>
+				<div onclick="switchDisplay('graphDisplay'); toggleSideNav();">Graphs</div>
+				<div onclick="switchDisplay('transactionsDisplay'); toggleSideNav();">Transactions</div>
+				<div class="sideNavDropDown" onclick="toggleSideNavDropDown()">&#9663; Import/Export
+					<div onclick="event.stopPropagation(); importJSON(); toggleSideNav();" class="sideNavDropDownChild">Import</div>
+					<div onclick="event.stopPropagation(); exportJSON(); toggleSideNav();" class="sideNavDropDownChild">Export</div>
+				</div>
+				<div onclick="switchDisplay('settingsDisplay'); toggleSideNav();">Settings</div>
 			</div>
 		</div>
 
 		<div id="main">
-
+			<div id="statsDisplay">
+				1+1=2
+			</div>
+			<div id="graphDisplay">
+				Graph go up :(
+			</div>
+			<div id="transactionsDisplay">
+				-100€ - McDonalds
+			</div>
+			<div id="settingsDisplay">
+				Currency: ?
+			</div>
 		</div>
 
 		<div id="addTransactionHoverButton">
