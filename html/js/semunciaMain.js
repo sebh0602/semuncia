@@ -22,10 +22,18 @@ function init(){
 }
 
 function saveLocalData(){
-	localStorage.transactions = JSON.stringify(localData.transactions);
-	localStorage.initialAmount = JSON.stringify(localData.initialAmount);
-	localStorage.recurringTransactions = JSON.stringify(localData.recurringTransactions);
-	localStorage.config = JSON.stringify(localData.config);
+	if (localData.transactions != undefined){
+		localStorage.transactions = JSON.stringify(localData.transactions);
+	}
+	if (localData.initialAmount != undefined){
+		localStorage.initialAmount = JSON.stringify(localData.initialAmount);
+	}
+	if (localData.recurringTransactions != undefined){
+		localStorage.recurringTransactions = JSON.stringify(localData.recurringTransactions);
+	}
+	if (localData.config != undefined){
+		localStorage.config = JSON.stringify(localData.config);
+	}
 }
 
 function importJSON(){
@@ -45,7 +53,6 @@ function importJSON(){
 			localData.config = result.config;
 		}
 		saveLocalData();
-		console.log(localData.transactions);
 	}
 	reader.readAsText(event.target.files[0]);
 	document.getElementById("transactionsFileInput").value = ""; //so the onchange event works

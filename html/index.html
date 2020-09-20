@@ -31,6 +31,7 @@
 	<link rel="stylesheet" type="text/css" href="css/addTransaction.css">
 
 	<script src="js/UIChanges.js" defer></script>
+	<script src="js/transactionsDisplay.js" defer></script>
 	<script src="js/semunciaMain.js" defer></script>
 
 	<!--This is for the stupid IE-Detection thing to work-->
@@ -90,7 +91,7 @@
 				<div onclick="switchDisplay('statsDisplay'); toggleSideNav();">€ 1234.56,-</div>
 				<div onclick="switchDisplay('statsDisplay'); toggleSideNav();">Statistics</div>
 				<div onclick="switchDisplay('graphDisplay'); toggleSideNav();">Graphs</div>
-				<div onclick="switchDisplay('transactionsDisplay'); toggleSideNav();">Transactions</div>
+				<div onclick="loadListOfTransactions(); toggleSideNav();">Transactions</div>
 				<div class="sideNavDropDown" onclick="toggleSideNavDropDown()">&#9663; Import/Export
 					<div onclick="toggleSideNavDropDown(); document.getElementById('transactionsFileInput').click(); toggleSideNav();" class="sideNavDropDownChild">Import</div>
 					<input type="file" onchange="importJSON()" id="transactionsFileInput" accept=".json">
@@ -108,7 +109,38 @@
 				Graph go up :(
 			</div>
 			<div id="transactionsDisplay">
-				-100€ - McDonalds
+				<div class="dateContainer">
+					<div class="date">2020-09-18 (Friday)</div>
+
+					<div class="transaction">
+						<div class="transactionLineOne">
+							<div>McDonalds Cheeseburger</div><div>&#9998;</div>
+						</div>
+						<div class="transactionLineTwo">
+							<div class="transactionCategories">
+								<div>Food</div>
+								<div>Lunch</div>
+							</div>
+							<div class="transactionAmount">
+								+1,20
+							</div>
+						</div>
+					</div>
+					<div class="transaction">
+						<div class="transactionLineOne">
+							<div>McDonalds Cheeseburger</div><div>&#9998;</div>
+						</div>
+						<div class="transactionLineTwo">
+							<div class="transactionCategories">
+								<div>Food</div>
+								<div>Lunch</div>
+							</div>
+							<div class="transactionAmount">
+								-1,20
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div id="settingsDisplay">
 				Currency: ?

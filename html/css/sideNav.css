@@ -50,6 +50,10 @@
 	white-space: nowrap;
 }
 
+#sideNav > #nav > div:not(#sideNavHeader):not(.sideNavDropDown):hover{
+	background-color: #a9bcd0;
+}
+
 #sideNav .sideNavDropDown > div{
 	/*border-top: 1px solid #1e2749;*/
 	padding-left: 15px;
@@ -61,4 +65,8 @@
 
 #sideNav .sideNavDropDown > #transactionsFileInput{
 	display: none;
+}
+
+#sideNav .sideNavDropDown .sideNavDropDownChild:hover{
+	background-color: #a9bcd0;
 }
