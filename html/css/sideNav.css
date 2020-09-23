@@ -42,8 +42,10 @@
 }
 
 #sideNav > #nav > div:not(#sideNavHeader){
-	font-size: 2em;
+	font-size: 1.75em;
 	padding-left: 10px;
+	padding-top:5px;
+	padding-bottom: 5px;
 	border-bottom: 1px solid #1e2749;
 	background-color: white;
 	cursor:pointer;

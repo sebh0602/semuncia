@@ -2,31 +2,46 @@
 	display: none;
 	width: 100%;
 	font-size: 1.5em;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 @media screen and (min-width: 800px){
 	#transactionsDisplay{
 		width:800px;
-		margin:auto;
+		margin-left:auto;
+		margin-right:auto;
+	}
+	#transactionsDisplay .transaction{
+		border-left: 1px solid #1e2749;
+		border-right: 1px solid #1e2749;
 	}
 }
 
 #transactionsDisplay .date{
 	background-color: #1e2749;
 	color: white;
+	padding: 5px;
+	padding-left: 10px;
 }
 
-#transactionsDisplay .transaction:nth-child(2){
+#transactionsDisplay .transaction{
+	border-bottom: 1px solid #1e2749;
+	padding:10px;
+}
+
+#transactionsDisplay .positiveTransaction{
 	background-color: #ccffcc;
 }
 
-#transactionsDisplay .transaction:nth-child(3){
+#transactionsDisplay .negativeTransaction{
 	background-color: #ffcccc;
 }
 
 #transactionsDisplay .transaction .transactionLineOne{
 	display: flex;
 	justify-content: space-between;
+	margin-bottom: 5px;
 }
 
 #transactionsDisplay .transaction .transactionLineTwo{
@@ -38,6 +53,13 @@
 	display: flex;
 }
 
+#transactionsDisplay .transaction .transactionCategories > div{
+	background-color: #a9bcd0;
+	border: 1px solid #7d8b99;
+	margin-right: 5px;
+	padding:5px;
+	font-size: 0.67em;
+}
+
 #transactionsDisplay .transaction .transactionAmount{
-	font-style:italic;
 }
