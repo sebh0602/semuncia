@@ -1,9 +1,25 @@
+var transactionScroll = 0;
+
 function loadListOfTransactions(){
-	switchDisplay('transactionsDisplay');
 	if (localData.transactions == undefined){
 		return;
 	}
+	if (transactionScroll == 0){
+		document.getElementById("transactionsDisplay").innerHTML = "";
+		loadMoreTransactions(0,50);
+	}
+}
+
+function loadMoreTransactions(start,end){
 	var transactionDates = Object.keys(localData.transactions).sort().reverse();
+	if (end > transactionDates.length){
+		end = transactionDates.length;
+		transactionScroll = -1;
+	} else{
+		transactionScroll += 50;
+	}
+	transactionDates = transactionDates.slice(start,end);
+
 	var date;
 	var tdHTML = ""; //transactionsDisplay HTML
 	var transaction;
@@ -11,45 +27,31 @@ function loadListOfTransactions(){
 		//add a date block
 		tdHTML += `<div class="dateContainer"><div class="date">${date} (${weekday(date)})</div>`;
 		for (transaction of localData.transactions[date]){
+			tdHTML += `<div class="transaction ${transaction["type"] == "+" ? "positiveTransaction" : "negativeTransaction"}">
+				<div class="transactionLineOne">
+					<div>${transaction["title"]}</div><div>&#9998;</div>
+				</div>
+				<div class="transactionLineTwo">
+					<div class="transactionCategories">`;
+			for (cat of transaction["categories"]){
+				tdHTML += `<div>${cat}</div>`;
+			}
+			tdHTML += `</div><div class="transactionAmount">${transaction["type"]}${addDecimalSeparators(transaction["amount"])}</div></div></div>`;
 			//add transaction block
 		}
 		tdHTML += `</div>`;
 	}
-	document.getElementById("transactionsDisplay").innerHTML = tdHTML;
-	console.log(tdHTML)
-	/*<div class="dateContainer">
-		<div class="date">2020-09-18 (Friday)</div>
-
-		<div class="transaction positiveTransaction">
-			<div class="transactionLineOne">
-				<div>McDonalds Cheeseburger</div><div>&#9998;</div>
-			</div>
-			<div class="transactionLineTwo">
-				<div class="transactionCategories">
-					<div>Food</div>
-					<div>Lunch</div>
-				</div>
-				<div class="transactionAmount">
-					+1,20
-				</div>
-			</div>
-		</div>
-		<div class="transaction negativeTransaction">
-			<div class="transactionLineOne">
-				<div>McDonalds Cheeseburger</div><div>&#9998;</div>
-			</div>
-			<div class="transactionLineTwo">
-				<div class="transactionCategories">
-					<div>Food</div>
-					<div>Lunch</div>
-				</div>
-				<div class="transactionAmount">
-					-1,20
-				</div>
-			</div>
-		</div>
-	</div>*/
+	document.getElementById("transactionsDisplay").innerHTML += tdHTML;
 }
+
+function scrollHandlerTD(event){
+	var td = document.getElementById("transactionsDisplay");
+	if (td.scrollHeight - td.clientHeight - td.scrollTop <= td.clientHeight && transactionScroll != -1){
+		loadMoreTransactions(transactionScroll,transactionScroll + 50);
+	}
+}
+
+//STILL ATTEMPTING TO LOAD NEW TRANSACTIONS AT END --> SET TO -!?
 
 function weekday(date){
 	var date = new Date(date);

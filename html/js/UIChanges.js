@@ -6,6 +6,10 @@ var listOfDisplays = {
 };
 
 function switchDisplay(newDisplay){
+	if (newDisplay == "transactionsDisplay"){
+		loadListOfTransactions();
+	}
+
 	for (display in listOfDisplays){
 		listOfDisplays[display].style.display = "none";
 	}
