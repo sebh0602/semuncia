@@ -1,4 +1,4 @@
-var transactionScroll = 0;
+var transactionScroll = 0; //-1: maximum reached, 0: not initialized, n: scrolled n number of dates
 
 function loadListOfTransactions(){
 	if (localData.transactions == undefined){

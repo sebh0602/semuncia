@@ -17,6 +17,7 @@ function init(){
 	if (localStorage.recurringTransactions != undefined){
 		localData.recurringTransactions = JSON.parse(localStorage.recurringTransactions);
 	}
+	loadStats();
 	saveLocalData();
 	switchDisplay(localData.config.currentDisplay);
 }
@@ -53,6 +54,7 @@ function importJSON(){
 		if ("config" in result){
 			localData.config = result.config;
 		}
+		loadStats();
 		saveLocalData();
 		switchDisplay(localData.config.currentDisplay);
 	}

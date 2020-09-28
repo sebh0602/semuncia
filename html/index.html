@@ -31,6 +31,7 @@
 	<link rel="stylesheet" type="text/css" href="css/addTransaction.css">
 
 	<script src="js/UIChanges.js" defer></script>
+	<script src="js/statsDisplay.js" defer></script>
 	<script src="js/transactionsDisplay.js" defer></script>
 	<script src="js/semunciaMain.js" defer></script>
 
@@ -88,7 +89,7 @@
 						</svg>
 					</div>
 				</div>
-				<div onclick="switchDisplay('statsDisplay'); toggleSideNav();">€ 1234.56,-</div>
+				<div onclick="switchDisplay('statsDisplay'); toggleSideNav();" id="sideNavStatsDisplay">€ 1234.56,-</div>
 				<div onclick="switchDisplay('statsDisplay'); toggleSideNav();">Statistics</div>
 				<div onclick="switchDisplay('graphDisplay'); toggleSideNav();">Graphs</div>
 				<div onclick="switchDisplay('transactionsDisplay'); toggleSideNav();">Transactions</div>
@@ -103,7 +104,7 @@
 
 		<div id="main">
 			<div id="statsDisplay">
-				1+1=2
+				<div id="statsDisplayInner"></div>
 			</div>
 			<div id="graphDisplay">
 				Graph go up :(

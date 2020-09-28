@@ -52,6 +52,11 @@
 	white-space: nowrap;
 }
 
+#sideNav > #nav > #sideNavStatsDisplay{
+	text-align: right;
+	padding-right: 10px;
+}
+
 #sideNav > #nav > div:not(#sideNavHeader):not(.sideNavDropDown):hover{
 	background-color: #a9bcd0;
 }
