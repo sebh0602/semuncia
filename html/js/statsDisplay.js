@@ -7,7 +7,10 @@ function loadStats(){
 	if (localData.initialAmount != undefined){
 		current = localData.initialAmount;
 	}
-	//no of days
+	if (localData.transactions == undefined){
+		return
+	}
+
 	var transactionDates = Object.keys(localData.transactions);
 	for (date of transactionDates){
 		for (transaction of localData.transactions[date]){

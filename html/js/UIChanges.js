@@ -46,3 +46,20 @@ function toggleSideNavDropDown(){
 		}
 	}
 }
+
+function showAddTransactionPopup(){
+	var dateInput = document.getElementById("addTransactionDateInput");
+	if (dateInput.value == ""){
+		dateInput.value = new Date().toISOString().split("T")[0];
+	}
+
+	document.getElementById("popupBackground").style.display = "block";
+	document.getElementById("addTransactionPopup").style.display = "block";
+	document.getElementById("addTransactionHoverButton").style.display = "none";
+}
+
+function hideAddTransactionPopup(){
+	document.getElementById("popupBackground").style.display = "none";
+	document.getElementById("addTransactionPopup").style.display = "none";
+	document.getElementById("addTransactionHoverButton").style.display = "flex";
+}

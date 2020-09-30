@@ -13,8 +13,8 @@ html,body{
 
 input{
 	font-size: 1em;
-	/*min-width: 42px; /*48px - 2*2px border - 2*1px padding = 42px*/
-	/*min-height: 42px;*/
+	min-width: 44px; /*50px - 2*2px border - 2*1px padding = 44px*/
+	min-height: 44px;
 	padding-left: 5px;
 }
 
