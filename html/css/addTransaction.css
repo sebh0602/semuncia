@@ -90,3 +90,8 @@
 	width: 100px;
 	display: block;
 }
+
+#addTransactionPopup #addTransactionFourthLine #addTransactionButton{
+	background-color: #000888;
+	width:100%;
+}

@@ -52,6 +52,7 @@ function showAddTransactionPopup(){
 	if (dateInput.value == ""){
 		dateInput.value = new Date().toISOString().split("T")[0];
 	}
+	loadTitleAutocomplete();
 
 	document.getElementById("popupBackground").style.display = "block";
 	document.getElementById("addTransactionPopup").style.display = "block";

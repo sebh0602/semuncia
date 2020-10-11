@@ -1,3 +1,6 @@
+//IDEA: Current balance Higher/lower/same as x% of days since FIRSTDATE
+//Current balance higher/lower/same as n number of days since FIRSTDATE
+
 function loadStats(){
 	var current = 0;
 	var earned = 0;

@@ -136,12 +136,16 @@
 				<input type="date" id="addTransactionDateInput">
 			</div>
 			<div id="addTransactionSecondLine">
-				<input type="text" id="addTransactionTitleInput" placeholder="Transaction title...">
+				<input type="text" id="addTransactionTitleInput" placeholder="Transaction title..." list="titleAutocomplete">
+				<datalist id="titleAutocomplete"></datalist>
 			</div>
 			<div id="addTransactionThirdLine">
 				<div id="addTransactionCategoryContainer">CATEGORIES</div>
 				<div>+-</div>
-				<input type="number" min="0" step="0.01" value="0" id="addTransactionValueInput">
+				<input type="number" min="0" step="0.01" value="0.00" id="addTransactionValueInput">
+			</div>
+			<div id="addTransactionFourthLine">
+				<button id="addTransactionButton" onclick="addTransaction()">Add transaction</button>
 			</div>
 		</div>
 		<div id="popupBackground" onclick="hideAddTransactionPopup();"></div>

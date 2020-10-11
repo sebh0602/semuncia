@@ -87,4 +87,14 @@ function addSpaces(number){
 	return arr.join("");
 }
 
+function getUnsortedTransactionArray(sortedTransactionArray){
+	var unsorted = [];
+	for (date in sortedTransactionArray){
+		for (transaction of sortedTransactionArray[date]){
+			unsorted.push(transaction);
+		}
+	}
+	return unsorted;
+}
+
 init();
