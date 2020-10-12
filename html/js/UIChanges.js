@@ -49,8 +49,31 @@ function toggleSideNavDropDown(){
 
 function showAddTransactionPopup(){
 	var dateInput = document.getElementById("addTransactionDateInput");
+	var titleInput = document.getElementById("addTransactionTitleInput");
+	var amountInput = document.getElementById("addTransactionValueInput");
+
+	if (localData.temp.newTransaction == undefined){
+		localData.temp.newTransaction = {};
+	}
+	if (localData.temp.newTransaction.date != undefined){
+		dateInput.value = localData.temp.newTransaction.date;
+	}
+	if (localData.temp.newTransaction.title != undefined){
+		titleInput.value = localData.temp.newTransaction.title;
+	}
+
+	if (localData.temp.newTransaction.type == undefined){
+		localData.temp.newTransaction.type = "-";
+	}
+	addTransactionToggleHandler();
+
+	if (localData.temp.newTransaction.amount != undefined){
+		amountInput.value = localData.temp.newTransaction.amount;
+	}
+
 	if (dateInput.value == ""){
 		dateInput.value = new Date().toISOString().split("T")[0];
+		localData.temp.newTransaction.date = dateInput.value;
 	}
 	loadTitleAutocomplete();
 

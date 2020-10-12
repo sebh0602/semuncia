@@ -17,6 +17,7 @@ function init(){
 	if (localStorage.recurringTransactions != undefined){
 		localData.recurringTransactions = JSON.parse(localStorage.recurringTransactions);
 	}
+	localData.temp = {};
 	loadStats();
 	saveLocalData();
 	switchDisplay(localData.config.currentDisplay);

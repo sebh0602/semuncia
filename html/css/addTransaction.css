@@ -40,6 +40,7 @@
 	background-color: white;
 	border: 1px solid #1e2749;
 	font-size: 1.5em;
+	transition: background-color 0.5s;
 }
 
 @media screen and (min-width: 800px){
@@ -78,11 +79,13 @@
 
 #addTransactionPopup #addTransactionSecondLine #addTransactionTitleInput{
 	margin: 10px;
+	width:calc(100% - 31px);
 }
 
 #addTransactionPopup #addTransactionThirdLine{
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 }
 
 #addTransactionPopup #addTransactionThirdLine #addTransactionValueInput{

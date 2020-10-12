@@ -28,10 +28,28 @@ function loadTitleAutocomplete(){
 			autoCompleteObject[transaction.title].amounts.push(transaction.amount);
 		}
 	}
-	//TODO Calculate mode: https://stackoverflow.com/questions/1053843/get-the-element-with-the-highest-occurrence-in-an-array
 
 	var autoCompleteArray = [];
+	var amounts, maxOccurrence, mode, modeObj;
+
 	for (title in autoCompleteObject){
+		amounts = autoCompleteObject[title].amounts;
+		maxOccurrence = 1;
+		mode = amounts[0];
+		modeObj = {};
+		for (a of amounts){
+			if (!(a in modeObj)){
+				modeObj[a] = 1;
+			} else {
+				modeObj[a] += 1;
+				if (modeObj[a] > maxOccurrence){
+					maxOccurrence = modeObj[a];
+					mode = a;
+				}
+			}
+		}
+		autoCompleteObject[title].amount = mode;
+
 		if (autoCompleteObject[title].positiveCount / autoCompleteObject[title].count > 0.5){
 			autoCompleteObject[title].type = "+";
 		} else{
@@ -43,11 +61,58 @@ function loadTitleAutocomplete(){
 	autoCompleteArray.sort(function(a,b){
 		return b.count - a.count;
 	});
-	console.log(autoCompleteArray)
+
+	localData.temp.titleAutocompleteCache = autoCompleteArray;
+	localData.temp.titleAutocompleteObjCache = autoCompleteObject;
+	/*var dataListInnerHTML = "";
+	for (transaction of autoCompleteArray){
+		dataListInnerHTML += `<option value="${transaction.title}">${transaction.categories} | ${transaction.type}${addDecimalSeparators(transaction.amount)} | ${transaction.count}x</option>`
+	}
+	document.getElementById("titleAutocomplete").innerHTML = dataListInnerHTML;*/
+}
+
+function titleAutocompleteSuggestion(){
+	var input = document.getElementById("addTransactionTitleInput").value;
+	localData.temp.newTransaction.title = input;
+
+	var filteredArray = localData.temp.titleAutocompleteCache;
+	if (input.length <= 1){
+		document.getElementById("titleAutocomplete").innerHTML = "";
+		return;
+	}
+	var inputs = input.split(" ");
+	for (i of inputs){
+		filteredArray = filteredArray.filter(function(value){
+			return value.title.toLowerCase().includes(i.toLowerCase());
+		});
+	}
+	if (filteredArray.length > 4){
+		filteredArray = filteredArray.slice(0,4);
+	}
 
 	var dataListInnerHTML = "";
-	for (transaction of autoCompleteArray){
-		dataListInnerHTML += `<option value="${transaction.title}">${transaction.categories} | ${transaction.type}${addDecimalSeparators(transaction.amounts[0])} | ${transaction.count}x</option>`
+	for (transaction of filteredArray){
+		dataListInnerHTML += `<option value="${transaction.title}">${transaction.categories} | ${transaction.type}${addDecimalSeparators(transaction.amount)} | ${transaction.count}x</option>`
 	}
 	document.getElementById("titleAutocomplete").innerHTML = dataListInnerHTML;
+}
+
+function titleAutoCompleteSelect(){
+	var input = document.getElementById("addTransactionTitleInput").value;
+	var transaction = localData.temp.titleAutocompleteObjCache[input];
+	localData.temp.newTransaction.type = transaction.type;
+	addTransactionToggleHandler();
+	document.getElementById("addTransactionValueInput").value = transaction.amount/100;
+}
+
+function addTransactionToggleHandler(){
+	if (localData.temp.newTransaction.type == "+"){
+		document.getElementById("addTransactionToggleToggle").className = "toggleToggle firstOption";
+		document.getElementById("addTransactionToggleValueDisplay").innerHTML = "+";
+		document.getElementById("addTransactionPopup").style.backgroundColor = "#ccffcc";
+	} else {
+		document.getElementById("addTransactionToggleToggle").className = "toggleToggle secondOption";
+		document.getElementById("addTransactionToggleValueDisplay").innerHTML = "-";
+		document.getElementById("addTransactionPopup").style.backgroundColor = "#ffcccc";
+	}
 }
