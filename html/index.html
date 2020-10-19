@@ -137,11 +137,15 @@
 				<input type="date" id="addTransactionDateInput" onchange="localData.temp.newTransaction.date = this.value;">
 			</div>
 			<div id="addTransactionSecondLine">
-				<input type="text" id="addTransactionTitleInput" placeholder="Transaction title..." list="titleAutocomplete" oninput="titleAutocompleteSuggestion()" onchange="titleAutoCompleteSelect()">
+				<input type="text" id="addTransactionTitleInput" placeholder="Transaction title..." list="titleAutocomplete" oninput="titleAutocompleteSuggestion()" onchange="titleAutoCompleteSelect()" onkeyup="if (event.key == 'Enter'){document.getElementById('addTransactionCategoryInput').focus();}">
 				<datalist id="titleAutocomplete"></datalist>
 			</div>
 			<div id="addTransactionThirdLine">
-				<div id="addTransactionCategoryContainer">CATEGORIES</div>
+				<div id="addTransactionCategoryContainer">
+					<input type="text" id="addTransactionCategoryInput" placeholder="Category..." list="categoryAutocomplete" oninput="categoryAutocompleteSuggestion()"  onkeyup="if (event.key == 'Enter'){categoryAutoCompleteSelect();}">
+					<datalist id="categoryAutocomplete"></datalist>
+					<button id="addCategoryButton" onclick="categoryAutoCompleteSelect()">+</button>
+				</div>
 				<div>
 					<div class="toggle" id="addTransactionToggle" onclick="localData.temp.newTransaction.type = (localData.temp.newTransaction.type == '+' ? '-':'+'); addTransactionToggleHandler()">
 						<div class="toggleBackground">
@@ -150,9 +154,11 @@
 						</div>
 					</div>
 				</div>
-				<input type="number" min="0" step="0.01" value="0.00" id="addTransactionValueInput" onchange="localData.temp.newTransaction.amount = this.value;">
+				<input type="number" min="0" step="0.01" value="0.00" id="addTransactionValueInput" onchange="localData.temp.newTransaction.amount = this.value;" onkeyup="if (event.key == 'Enter'){addTransaction();}">
 			</div>
 			<div id="addTransactionFourthLine">
+			</div>
+			<div id="addTransactionFifthLine">
 				<button id="addTransactionButton" onclick="addTransaction()">Add transaction</button>
 			</div>
 		</div>

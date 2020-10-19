@@ -52,6 +52,7 @@
 
 #transactionsDisplay .transaction .transactionCategories{
 	display: flex;
+	flex-wrap: wrap;
 }
 
 #transactionsDisplay .transaction .transactionCategories > div{

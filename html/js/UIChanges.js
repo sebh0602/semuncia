@@ -50,6 +50,7 @@ function toggleSideNavDropDown(){
 function showAddTransactionPopup(){
 	var dateInput = document.getElementById("addTransactionDateInput");
 	var titleInput = document.getElementById("addTransactionTitleInput");
+	var categoryInput = document.getElementById("addTransactionCategoryInput");
 	var amountInput = document.getElementById("addTransactionValueInput");
 
 	if (localData.temp.newTransaction == undefined){
@@ -67,6 +68,11 @@ function showAddTransactionPopup(){
 	}
 	addTransactionToggleHandler();
 
+	if (localData.temp.newTransaction.categoryInput != undefined){
+		categoryInput.value = localData.temp.newTransaction.categoryInput;
+	}
+	addTransactionCategoryDisplayHandler();
+
 	if (localData.temp.newTransaction.amount != undefined){
 		amountInput.value = localData.temp.newTransaction.amount;
 	}
@@ -76,10 +82,13 @@ function showAddTransactionPopup(){
 		localData.temp.newTransaction.date = dateInput.value;
 	}
 	loadTitleAutocomplete();
+	loadCategoryAutocomplete();
 
 	document.getElementById("popupBackground").style.display = "block";
 	document.getElementById("addTransactionPopup").style.display = "block";
 	document.getElementById("addTransactionHoverButton").style.display = "none";
+
+	document.getElementById("addTransactionTitleInput").focus();
 }
 
 function hideAddTransactionPopup(){
