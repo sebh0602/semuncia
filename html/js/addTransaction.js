@@ -1,5 +1,21 @@
 function addTransaction(){
 	hideAddTransactionPopup();
+	var date = localData.temp.newTransaction.date;
+	if (localData.transactions[date] == undefined){
+		localData.transactions[date] = [];
+	}
+	localData.transactions[date].push(localData.temp.newTransaction);
+
+	localData.temp.newTransaction = undefined;
+	document.getElementById("addTransactionDateInput").value = "";
+	document.getElementById("addTransactionTitleInput").value = "";
+	document.getElementById("addTransactionCategoryInput").value = "";
+	document.getElementById("addTransactionValueInput").value = "0.00";
+
+	saveLocalData();
+	transactionScroll = 0;
+	loadListOfTransactions();
+	loadStats();
 }
 
 function loadTitleAutocomplete(){
@@ -105,6 +121,7 @@ function titleAutoCompleteSelect(event){
 			localData.temp.newTransaction.categories.push(category);
 		}
 	}
+	localData.temp.newTransaction.amount = transaction.amount;
 	addTransactionCategoryDisplayHandler();
 	document.getElementById("addTransactionValueInput").value = transaction.amount/100;
 	document.getElementById("addTransactionCategoryInput").focus();

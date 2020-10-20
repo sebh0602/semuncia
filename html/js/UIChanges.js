@@ -74,7 +74,7 @@ function showAddTransactionPopup(){
 	addTransactionCategoryDisplayHandler();
 
 	if (localData.temp.newTransaction.amount != undefined){
-		amountInput.value = localData.temp.newTransaction.amount;
+		amountInput.value = localData.temp.newTransaction.amount/100;
 	}
 
 	if (dateInput.value == ""){

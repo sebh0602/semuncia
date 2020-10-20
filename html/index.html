@@ -154,7 +154,7 @@
 						</div>
 					</div>
 				</div>
-				<input type="number" min="0" step="0.01" value="0.00" id="addTransactionValueInput" onchange="localData.temp.newTransaction.amount = this.value;" onkeyup="if (event.key == 'Enter'){addTransaction();}">
+				<input type="number" min="0" step="0.01" value="0.00" id="addTransactionValueInput" oninput="localData.temp.newTransaction.amount = Math.round(this.value*100);" onkeyup="if (event.key == 'Enter'){addTransaction();}">
 			</div>
 			<div id="addTransactionFourthLine">
 			</div>
