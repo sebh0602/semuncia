@@ -68,6 +68,9 @@ function exportJSON(){
 }
 
 function addDecimalSeparators(cents){
+	if (cents == undefined){
+		return "?";
+	}
 	var arr = cents.toString().split("");
 	while (arr.length < 3){
 		arr.splice(0,0,"0");

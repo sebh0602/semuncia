@@ -53,29 +53,44 @@ function showAddTransactionPopup(){
 	var categoryInput = document.getElementById("addTransactionCategoryInput");
 	var amountInput = document.getElementById("addTransactionValueInput");
 
-	if (localData.temp.newTransaction == undefined){
-		localData.temp.newTransaction = {};
-	}
-	if (localData.temp.newTransaction.date != undefined){
-		dateInput.value = localData.temp.newTransaction.date;
-	}
-	if (localData.temp.newTransaction.title != undefined){
-		titleInput.value = localData.temp.newTransaction.title;
+	if (localData.temp.popupMode == "add"){
+		if (localData.temp.newTransaction == undefined){
+			localData.temp.newTransaction = {};
+		}
+		var transaction = localData.temp.newTransaction;
+		if (localData.temp.newTransaction.type == undefined){
+			localData.temp.newTransaction.type = "-";
+		}
+	} else {
+		var transaction = localData.temp.editTransaction;
 	}
 
-	if (localData.temp.newTransaction.type == undefined){
-		localData.temp.newTransaction.type = "-";
+	if (transaction.date != undefined){
+		dateInput.value = transaction.date;
+	} else {
+		dateInput.value = "";
 	}
-	addTransactionToggleHandler();
 
-	if (localData.temp.newTransaction.categoryInput != undefined){
-		categoryInput.value = localData.temp.newTransaction.categoryInput;
+	if (transaction.title != undefined){
+		titleInput.value = transaction.title;
+	} else{
+		titleInput.value = "";
 	}
+
+	if (transaction.categoryInput != undefined){
+		categoryInput.value = transaction.categoryInput;
+	} else{
+		categoryInput.value = "";
+	}
+
+	if (transaction.amount != undefined){
+		amountInput.value = transaction.amount/100;
+	} else{
+		amountInput.value = "0.00";
+	}
+
 	addTransactionCategoryDisplayHandler();
-
-	if (localData.temp.newTransaction.amount != undefined){
-		amountInput.value = localData.temp.newTransaction.amount/100;
-	}
+	addTransactionToggleHandler();
 
 	if (dateInput.value == ""){
 		dateInput.value = new Date().toISOString().split("T")[0];
@@ -83,6 +98,12 @@ function showAddTransactionPopup(){
 	}
 	loadTitleAutocomplete();
 	loadCategoryAutocomplete();
+
+	if (localData.temp.popupMode == "add"){
+		document.getElementById("addTransactionTitle").innerHTML = "Add transaction";
+	} else{
+		document.getElementById("addTransactionTitle").innerHTML = "Edit transaction";
+	}
 
 	document.getElementById("popupBackground").style.display = "block";
 	document.getElementById("addTransactionPopup").style.display = "block";

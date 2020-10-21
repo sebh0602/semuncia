@@ -35,6 +35,7 @@
 	<script src="js/statsDisplay.js" defer></script>
 	<script src="js/transactionsDisplay.js" defer></script>
 	<script src="js/addTransaction.js" defer></script>
+	<script src="js/editTransaction.js" defer></script>
 	<script src="js/semunciaMain.js" defer></script>
 
 	<!--This is for the stupid IE-Detection thing to work-->
@@ -119,13 +120,13 @@
 			</div>
 		</div>
 
-		<div id="addTransactionHoverButton" onclick="showAddTransactionPopup();">
+		<div id="addTransactionHoverButton" onclick="localData.temp.popupMode = 'add'; showAddTransactionPopup();">
 			<div>+</div>
 		</div>
 
 		<div id="addTransactionPopup">
 			<div id="addTransactionTop">
-				<div>Add transaction</div>
+				<div id="addTransactionTitle">Add transaction</div>
 				<div onclick="hideAddTransactionPopup();">
 					<svg width="100%" height="100%">
 						<line x1="30%" x2="70%" y1="30%" y2="70%" style="stroke:#1e2749;stroke-width:5%"/>
@@ -134,7 +135,7 @@
 				</div>
 			</div>
 			<div id="addTransactionFirstLine">
-				<input type="date" id="addTransactionDateInput" onchange="localData.temp.newTransaction.date = this.value;">
+				<input type="date" id="addTransactionDateInput" onchange="if (localData.temp.popupMode == 'add'){localData.temp.newTransaction.date = this.value;}else{localData.temp.editTransaction.date = this.value}">
 			</div>
 			<div id="addTransactionSecondLine">
 				<input type="text" id="addTransactionTitleInput" placeholder="Transaction title..." list="titleAutocomplete" oninput="titleAutocompleteSuggestion()" onchange="titleAutoCompleteSelect()" onkeyup="if (event.key == 'Enter'){document.getElementById('addTransactionCategoryInput').focus();}">
@@ -147,14 +148,14 @@
 					<button id="addCategoryButton" onclick="categoryAutoCompleteSelect()">+</button>
 				</div>
 				<div>
-					<div class="toggle" id="addTransactionToggle" onclick="localData.temp.newTransaction.type = (localData.temp.newTransaction.type == '+' ? '-':'+'); addTransactionToggleHandler()">
+					<div class="toggle" id="addTransactionToggle" onclick="addTransactionInvertToggle(); addTransactionToggleHandler();">
 						<div class="toggleBackground">
 							<div class="toggleToggle firstOption" id="addTransactionToggleToggle"></div>
 							<div class="toggleValueDisplay" id="addTransactionToggleValueDisplay">?</div>
 						</div>
 					</div>
 				</div>
-				<input type="number" min="0" step="0.01" value="0.00" id="addTransactionValueInput" oninput="localData.temp.newTransaction.amount = Math.round(this.value*100);" onkeyup="if (event.key == 'Enter'){addTransaction();}">
+				<input type="number" min="0" step="0.01" value="0.00" id="addTransactionValueInput" oninput="if (localData.temp.popupMode == 'add'){localData.temp.newTransaction.amount = Math.round(this.value*100);}else{localData.temp.editTransaction.amount = Math.round(this.value*100);}" onkeyup="if (event.key == 'Enter'){addTransaction();}">
 			</div>
 			<div id="addTransactionFourthLine">
 			</div>

@@ -1,24 +1,37 @@
 function addTransaction(){
-	hideAddTransactionPopup();
-	var date = localData.temp.newTransaction.date;
-	if (localData.transactions[date] == undefined){
-		localData.transactions[date] = [];
+	if (localData.temp.popupMode == "add"){
+		hideAddTransactionPopup();
+
+		if (localData.temp.newTransaction.title == undefined){
+			localData.temp.newTransaction.title = "";
+		}
+		if (localData.temp.newTransaction.amount == undefined){
+			localData.temp.newTransaction.amount = "0";
+		}
+
+		var date = localData.temp.newTransaction.date;
+		if (localData.transactions[date] == undefined){
+			localData.transactions[date] = [];
+		}
+		localData.transactions[date].push(localData.temp.newTransaction);
+
+		localData.temp.newTransaction = undefined;
+		document.getElementById("addTransactionDateInput").value = "";
+		document.getElementById("addTransactionTitleInput").value = "";
+		document.getElementById("addTransactionCategoryInput").value = "";
+		document.getElementById("addTransactionValueInput").value = "0.00";
+
+		saveLocalData();
+		transactionScroll = 0;
+		loadListOfTransactions();
+		loadStats();
 	}
-	localData.transactions[date].push(localData.temp.newTransaction);
-
-	localData.temp.newTransaction = undefined;
-	document.getElementById("addTransactionDateInput").value = "";
-	document.getElementById("addTransactionTitleInput").value = "";
-	document.getElementById("addTransactionCategoryInput").value = "";
-	document.getElementById("addTransactionValueInput").value = "0.00";
-
-	saveLocalData();
-	transactionScroll = 0;
-	loadListOfTransactions();
-	loadStats();
 }
 
 function loadTitleAutocomplete(){
+	if (localData.temp.popupMode == "edit"){
+		return;
+	}
 	//{"Title":{categories:["cat"],count:3,positiveCount:0,amounts:[1,1,2]}}
 	var unsorted = getUnsortedTransactionArray(localData.transactions);
 	var autoCompleteObject = {};
@@ -83,6 +96,10 @@ function loadTitleAutocomplete(){
 }
 
 function titleAutocompleteSuggestion(){
+	if (localData.temp.popupMode == "edit"){
+		return;
+	}
+
 	var input = document.getElementById("addTransactionTitleInput").value;
 	localData.temp.newTransaction.title = input;
 
@@ -109,6 +126,10 @@ function titleAutocompleteSuggestion(){
 }
 
 function titleAutoCompleteSelect(event){
+	if (localData.temp.popupMode == "edit"){
+		return;
+	}
+
 	var input = document.getElementById("addTransactionTitleInput").value;
 	var transaction = localData.temp.titleAutocompleteObjCache[input];
 	if (transaction == undefined){
@@ -157,7 +178,11 @@ function loadCategoryAutocomplete(){
 
 function categoryAutocompleteSuggestion(){
 	var input = document.getElementById("addTransactionCategoryInput").value;
-	localData.temp.newTransaction.categoryInput = input;
+	if (localData.temp.popupMode == "add"){
+		localData.temp.newTransaction.categoryInput = input;
+	} else{
+		localData.temp.editTransaction.categoryInput = input;
+	}
 
 	var filteredArray = localData.temp.categoryAutocompleteCache;
 	if (input.length == 0){
@@ -186,23 +211,37 @@ function categoryAutoCompleteSelect(){
 	if (localData.temp.newTransaction.categories == undefined){
 		localData.temp.newTransaction.categories = [];
 	}
-	if (localData.temp.newTransaction.categories.includes(input)){
-		return;
+	if (localData.temp.popupMode == "add"){
+		if (localData.temp.newTransaction.categories.includes(input)){
+			return;
+		}
+		localData.temp.newTransaction.categories.push(input);
+		localData.temp.newTransaction.categoryInput = "";
+	} else{
+		if (localData.temp.editTransaction.categories.includes(input)){
+			return;
+		}
+		localData.temp.editTransaction.categories.push(input);
+		localData.temp.editTransaction.categoryInput = "";
 	}
-	localData.temp.newTransaction.categories.push(input);
 	addTransactionCategoryDisplayHandler();
 	document.getElementById("addTransactionCategoryInput").value = "";
-	localData.temp.newTransaction.categoryInput = "";
 	document.getElementById("categoryAutocomplete").innerHTML = "";
 	document.getElementById("addTransactionValueInput").focus();
 }
 
 function addTransactionCategoryDisplayHandler(){
 	displayInnerHTML = "";
-	if (localData.temp.newTransaction.categories == undefined){
-		localData.temp.newTransaction.categories = [];
+	if (localData.temp.popupMode == "add"){
+		if (localData.temp.newTransaction.categories == undefined){
+			localData.temp.newTransaction.categories = [];
+		}
+		var transaction = localData.temp.newTransaction;
+	} else{
+		var transaction = localData.temp.editTransaction;
 	}
-	for (category of localData.temp.newTransaction.categories){
+
+	for (category of transaction.categories){
 		displayInnerHTML += `<div onclick="addTransactionRemoveCategory('${category}')">${category}</div>`;
 	}
 	document.getElementById("addTransactionFourthLine").innerHTML = displayInnerHTML;
@@ -213,8 +252,21 @@ function addTransactionRemoveCategory(category){
 	addTransactionCategoryDisplayHandler();
 }
 
+function addTransactionInvertToggle(){
+	if (localData.temp.popupMode == "add"){
+		localData.temp.newTransaction.type = (localData.temp.newTransaction.type == '+' ? '-':'+');
+	} else{
+		localData.temp.editTransaction.type = (localData.temp.editTransaction.type == '+' ? '-':'+');
+	}
+}
+
 function addTransactionToggleHandler(){
-	if (localData.temp.newTransaction.type == "+"){
+	if (localData.temp.popupMode == "add"){
+		var transaction = localData.temp.newTransaction;
+	} else{
+		var transaction = localData.temp.editTransaction;
+	}
+	if (transaction.type == "+"){
 		document.getElementById("addTransactionToggleToggle").className = "toggleToggle firstOption";
 		document.getElementById("addTransactionToggleValueDisplay").innerHTML = "+";
 		document.getElementById("addTransactionPopup").style.backgroundColor = "#ccffcc";
