@@ -101,8 +101,12 @@ function showAddTransactionPopup(){
 
 	if (localData.temp.popupMode == "add"){
 		document.getElementById("addTransactionTitle").innerHTML = "Add transaction";
+		document.getElementById("addTransactionButton").innerHTML = "Add transaction";
+		document.getElementById("deleteTransactionButton").style.display = "none";
 	} else{
 		document.getElementById("addTransactionTitle").innerHTML = "Edit transaction";
+		document.getElementById("addTransactionButton").innerHTML = "Edit transaction";
+		document.getElementById("deleteTransactionButton").style.display = "block";
 	}
 
 	document.getElementById("popupBackground").style.display = "block";

@@ -26,10 +26,10 @@ function loadMoreTransactions(start,end){
 	for (date of transactionDates){
 		//add a date block
 		tdHTML += `<div class="dateContainer"><div class="date">${date} (${weekday(date)})</div>`;
-		for (transaction of localData.transactions[date]){
+		for ([index, transaction] of localData.transactions[date].entries()){
 			tdHTML += `<div class="transaction ${transaction["type"] == "+" ? "positiveTransaction" : "negativeTransaction"}">
 				<div class="transactionLineOne">
-					<div>${transaction["title"]}</div><div>&#9998;</div>
+					<div>${transaction["title"]}</div><div onclick="editTransaction('${date}',${index})">&#8942;</div>
 				</div>
 				<div class="transactionLineTwo">
 					<div class="transactionCategories">`;

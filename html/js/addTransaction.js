@@ -25,6 +25,31 @@ function addTransaction(){
 		transactionScroll = 0;
 		loadListOfTransactions();
 		loadStats();
+	} else{
+		//delete it, then add again at correct date
+		var date = localData.temp.editTransaction.indexDate;
+		var index = localData.temp.editTransaction.index;
+		var newDate = localData.temp.editTransaction.date;
+
+		localData.transactions[date].splice(index,1);
+		delete localData.temp.editTransaction.indexDate;
+		delete localData.temp.editTransaction.index;
+
+		if (localData.transactions[newDate] == undefined){
+			localData.transactions[newDate] = [];
+		}
+		localData.transactions[newDate].push(localData.temp.editTransaction);
+
+		localData.temp.editTransaction = undefined;
+		if (localData.transactions[date].length == 0){
+			delete localData.transactions[date];
+		}
+
+		saveLocalData();
+		transactionScroll = 0;
+		loadListOfTransactions();
+		loadStats();
+		hideAddTransactionPopup();
 	}
 }
 
@@ -96,11 +121,12 @@ function loadTitleAutocomplete(){
 }
 
 function titleAutocompleteSuggestion(){
+	var input = document.getElementById("addTransactionTitleInput").value;
 	if (localData.temp.popupMode == "edit"){
+		localData.temp.editTransaction.title = input;
 		return;
 	}
 
-	var input = document.getElementById("addTransactionTitleInput").value;
 	localData.temp.newTransaction.title = input;
 
 	var filteredArray = localData.temp.titleAutocompleteCache;
@@ -208,10 +234,15 @@ function categoryAutocompleteSuggestion(){
 
 function categoryAutoCompleteSelect(){
 	var input = document.getElementById("addTransactionCategoryInput").value;
-	if (localData.temp.newTransaction.categories == undefined){
-		localData.temp.newTransaction.categories = [];
+
+	if (input.length == 0){
+		document.getElementById("addTransactionValueInput").focus();
+		return;
 	}
 	if (localData.temp.popupMode == "add"){
+		if (localData.temp.newTransaction.categories == undefined){
+			localData.temp.newTransaction.categories = [];
+		}
 		if (localData.temp.newTransaction.categories.includes(input)){
 			return;
 		}
@@ -248,7 +279,11 @@ function addTransactionCategoryDisplayHandler(){
 }
 
 function addTransactionRemoveCategory(category){
-	localData.temp.newTransaction.categories.splice(localData.temp.newTransaction.categories.indexOf(category),1);
+	if (localData.temp.popupMode == "add"){
+		localData.temp.newTransaction.categories.splice(localData.temp.newTransaction.categories.indexOf(category),1);
+	} else{
+		localData.temp.editTransaction.categories.splice(localData.temp.editTransaction.categories.indexOf(category),1);
+	}
 	addTransactionCategoryDisplayHandler();
 }
 

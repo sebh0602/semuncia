@@ -125,6 +125,17 @@
 	text-decoration: underline;
 }
 
+#addTransactionPopup #addTransactionFifthLine{
+	display: flex;
+	flex-wrap: nowrap;
+}
+
+#addTransactionPopup #addTransactionFifthLine #deleteTransactionButton{
+	background-color: #cc0000;
+	width:100%;
+	border-right: none;
+}
+
 #addTransactionPopup #addTransactionFifthLine #addTransactionButton{
 	background-color: #000888;
 	width:100%;
