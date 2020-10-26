@@ -66,7 +66,25 @@ function importJSON(){
 }
 
 function exportJSON(){
-	alert("export");
+	var exportableJSON = {
+		initialAmount:localData.initialAmount,
+		recurringTransactions:localData.recurringTransactions,
+		transactions:localData.transactions
+	};
+
+	var fileName = "semuncia_export_" + new Date().toISOString().split("T")[0] + ".json";
+	var stringified = JSON.stringify(exportableJSON,null,"\t");
+	var blob = new Blob([stringified], {type:"application/json"});
+	var a = document.createElement("a");
+	var url = URL.createObjectURL(blob);
+	a.href = url;
+	a.download = fileName;
+	document.body.appendChild(a);
+	a.click();
+	setTimeout(function() { //not sure why this is done like this (copied from SO)
+		document.body.removeChild(a);
+		window.URL.revokeObjectURL(url);
+	}, 0);
 }
 
 function addDecimalSeparators(cents){
