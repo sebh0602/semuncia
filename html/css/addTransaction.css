@@ -121,7 +121,8 @@
 }
 
 #addTransactionPopup #addTransactionFourthLine > div:hover{
-	background-color: #ffcccc;
+	background-color: #cc0000;
+	color: white;
 	text-decoration: underline;
 }
 

@@ -9,6 +9,9 @@ function switchDisplay(newDisplay){
 	if (newDisplay == "transactionsDisplay"){
 		loadListOfTransactions();
 	}
+	if (newDisplay == "settingsDisplay"){
+		loadSettingsPage();
+	}
 
 	for (display in listOfDisplays){
 		listOfDisplays[display].style.display = "none";

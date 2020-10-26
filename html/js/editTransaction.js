@@ -19,7 +19,7 @@ function deleteTransaction(){
 	localData.editTransaction = undefined;
 	saveLocalData();
 	transactionScroll = 0;
-	loadListOfTransactions();
+	switchDisplay(localData.config.currentDisplay);
 	loadStats();
 	hideAddTransactionPopup();
 }

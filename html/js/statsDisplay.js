@@ -1,6 +1,8 @@
 //IDEA: Current balance Higher/lower/same as x% of days since FIRSTDATE
 //Current balance higher/lower/same as n number of days since FIRSTDATE
 
+//IDEA: check if current display is stats display. if not, only load sidebar number
+
 function loadStats(){
 	var current = 0;
 	var earned = 0;
@@ -11,7 +13,7 @@ function loadStats(){
 		current = localData.initialAmount;
 	}
 	if (localData.transactions == undefined){
-		return
+		return;
 	}
 
 	var transactionDates = Object.keys(localData.transactions);

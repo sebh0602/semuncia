@@ -1,3 +1,30 @@
 #settingsDisplay{
 	display: none;
+	width: 100%;
+	height: 95vh;
+	max-height: calc(100vh - 50px); /*50px because header*/
+	overflow-y: auto;
+}
+
+@media screen and (min-width: 800px){
+	#settingsDisplay{
+		width:800px;
+		margin-left:auto;
+		margin-right:auto;
+	}
+}
+
+#settingsDisplay > div{
+	border-bottom: 1px solid #1e2749;
+	padding: 10px;
+}
+
+#settingsDisplay .settingsHeader{
+	font-size: 1.25em;
+	margin-bottom: 10px;
+}
+
+#settingsDisplay #settingsInitialAmountInput{
+	width:100px;
+	margin-right:10px;
 }

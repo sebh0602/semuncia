@@ -23,7 +23,7 @@ function addTransaction(){
 
 		saveLocalData();
 		transactionScroll = 0;
-		loadListOfTransactions();
+		switchDisplay(localData.config.currentDisplay);
 		loadStats();
 	} else{
 		//delete it, then add again at correct date
@@ -47,7 +47,7 @@ function addTransaction(){
 
 		saveLocalData();
 		transactionScroll = 0;
-		loadListOfTransactions();
+		switchDisplay(localData.config.currentDisplay);
 		loadStats();
 		hideAddTransactionPopup();
 	}

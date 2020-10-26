@@ -19,8 +19,8 @@ input{
 }
 
 button{
-	/*min-width: 48px;
-	min-height: 48px;*/
+	/*min-width: 48px;*/
+	min-height: 50px;
 	background-color: #1e2749;
 	color:white;
 	font-size: 1em;

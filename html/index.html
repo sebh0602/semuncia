@@ -36,6 +36,7 @@
 	<script src="js/transactionsDisplay.js" defer></script>
 	<script src="js/addTransaction.js" defer></script>
 	<script src="js/editTransaction.js" defer></script>
+	<script src="js/settings.js" defer></script>
 	<script src="js/semunciaMain.js" defer></script>
 
 	<!--This is for the stupid IE-Detection thing to work-->
@@ -92,9 +93,9 @@
 						</svg>
 					</div>
 				</div>
-				<div onclick="switchDisplay('statsDisplay'); toggleSideNav();" id="sideNavStatsDisplay">€ 1234.56,-</div>
+				<div onclick="switchDisplay('statsDisplay'); toggleSideNav();" id="sideNavStatsDisplay">0.00</div>
 				<div onclick="switchDisplay('statsDisplay'); toggleSideNav();">Statistics</div>
-				<div onclick="switchDisplay('graphDisplay'); toggleSideNav();">Graphs</div>
+				<div onclick="switchDisplay('graphDisplay'); toggleSideNav();">Graph</div>
 				<div onclick="switchDisplay('transactionsDisplay'); toggleSideNav();">Transactions</div>
 				<div class="sideNavDropDown" onclick="toggleSideNavDropDown()">&#9663; Import/Export
 					<div onclick="toggleSideNavDropDown(); document.getElementById('transactionsFileInput').click(); toggleSideNav();" class="sideNavDropDownChild">Import</div>
@@ -107,16 +108,26 @@
 
 		<div id="main">
 			<div id="statsDisplay">
-				<div id="statsDisplayInner">No stats to display.</div>
+				<div id="statsDisplayInner">
+					<div class="emptyNotice">No statistics to display.</div>
+				</div>
 			</div>
 			<div id="graphDisplay">
-				Graph go up :(
+				<div class="emptyNotice">No graph to display.</div>
 			</div>
 			<div id="transactionsDisplay" onscroll="scrollHandlerTD();">
-				No transactions to display.
+				<div class="emptyNotice">No transactions to display.</div>
 			</div>
 			<div id="settingsDisplay">
-				Currency: ?
+				<div>
+					<div class="settingsHeader">Initial amount of money</div>
+					<input type="number" min="0" step="0.01" value="0.00" id="settingsInitialAmountInput" onkeyup="if (event.key == 'Enter'){setInitialAmount();}">
+					<button onclick="setInitialAmount();">Set</button>
+				</div>
+				<div>
+					<div class="settingsHeader">Delete all local data</div>
+					<button style="background-color: #cc0000;" onclick="deleteAllLocalData();">Delete all</button>
+				</div>
 			</div>
 		</div>
 

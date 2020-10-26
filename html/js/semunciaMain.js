@@ -13,6 +13,8 @@ function init(){
 	}
 	if (localStorage.initialAmount != undefined){
 		localData.initialAmount = JSON.parse(localStorage.initialAmount);
+	} else {
+		localData.initialAmount = 0;
 	}
 	if (localStorage.recurringTransactions != undefined){
 		localData.recurringTransactions = JSON.parse(localStorage.recurringTransactions);
