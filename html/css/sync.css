@@ -1,0 +1,92 @@
+#syncPopup{
+	display: none;
+	position: fixed;
+	top:10vh;
+	left:0;
+	right:0;
+	z-index: 10;
+	background-color: white;
+	border: 1px solid #1e2749;
+	font-size: 1.5em;
+	transition: background-color 0.5s;
+}
+
+@media screen and (min-width: 800px){
+	#syncPopup{
+		left:calc(50vw - 400px);
+		right:calc(50vw - 400px);
+	}
+}
+
+#syncPopup #syncTop{
+	background-color: #a9bcd0;
+	display: flex;
+	justify-content: space-between;
+	line-height: 50px;
+}
+
+#syncPopup #syncTop div:nth-child(1){
+	height: 50px;
+	margin-left: 10px;
+}
+
+#syncPopup #syncTop div:nth-child(2){
+	height: 50px;
+	width:50px;
+	cursor: pointer;
+}
+
+#syncPopup #syncFirstLine{
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+#syncPopup #syncSecondLineA{
+	padding: 10px;
+	padding-bottom: 0px;
+}
+
+#syncPopup #syncSecondLine{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+}
+
+#syncPopup #syncSecondLine > *{
+	margin-top: 0px !important;
+}
+
+#syncPopup #syncSecondLine > div{
+	flex-grow: 2;
+	margin: 10px;
+	line-height: 50px;
+	user-select: text;
+	cursor: text;
+	font-weight: bold;
+}
+
+#syncPopup #syncSecondLine > input{
+	flex-grow: 2;
+	margin: 10px;
+}
+
+#syncPopup #syncSecondLine > button{
+	margin:10px;
+	width:110px;
+}
+
+#syncPopup #syncSecondLine > button:disabled{
+	background-color: #d8dbe2;
+	color:black;
+}
+
+#syncPopup #syncThirdLine > input{
+	width:calc(100% - 31px);
+	margin: 10px;
+}
+
+#syncPopup #syncFourthLine > p{
+	width:calc(100% - 31px);
+	margin: 10px;
+	font-style: italic;
+}

@@ -119,8 +119,24 @@ function showAddTransactionPopup(){
 	document.getElementById("addTransactionTitleInput").focus();
 }
 
-function hideAddTransactionPopup(){
+function showSyncPopup(){
+	if (localData.sync.id == undefined){
+		localData.sync.id = generateId();
+	}
+	document.getElementById("syncIdInput").value = localData.sync.id;
+	document.getElementById("syncIdDisplay").innerHTML = localData.sync.id;
+	syncToggleHandler();
+	document.getElementById("syncIdInput").style.display = "none";
+	document.getElementById("syncIdDisplay").style.display = "block";
+	document.getElementById("syncEditIdButton").innerHTML = "Edit ID";
+	document.getElementById("popupBackground").style.display = "block";
+	document.getElementById("syncPopup").style.display = "block";
+	document.getElementById("addTransactionHoverButton").style.display = "none";
+}
+
+function hideAllPopups(){
 	document.getElementById("popupBackground").style.display = "none";
 	document.getElementById("addTransactionPopup").style.display = "none";
+	document.getElementById("syncPopup").style.display = "none";
 	document.getElementById("addTransactionHoverButton").style.display = "flex";
 }

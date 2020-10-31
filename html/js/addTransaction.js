@@ -1,6 +1,6 @@
 function addTransaction(){
 	if (localData.temp.popupMode == "add"){
-		hideAddTransactionPopup();
+		hideAllPopups();
 
 		if (localData.temp.newTransaction.title == undefined){
 			localData.temp.newTransaction.title = "";
@@ -49,7 +49,7 @@ function addTransaction(){
 		transactionScroll = 0;
 		switchDisplay(localData.config.currentDisplay);
 		loadStats();
-		hideAddTransactionPopup();
+		hideAllPopups();
 	}
 }
 

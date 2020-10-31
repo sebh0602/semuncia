@@ -19,6 +19,13 @@ function init(){
 	if (localStorage.recurringTransactions != undefined){
 		localData.recurringTransactions = JSON.parse(localStorage.recurringTransactions);
 	}
+	if (localStorage.sync != undefined){
+		localData.sync = JSON.parse(localStorage.sync);
+	} else {
+		localData.sync = {
+			syncActivated: false
+		};
+	}
 	localData.temp = {};
 	loadStats();
 	saveLocalData();
@@ -37,6 +44,9 @@ function saveLocalData(){
 	}
 	if (localData.config != undefined){
 		localStorage.config = JSON.stringify(localData.config);
+	}
+	if (localData.sync != undefined){
+		localStorage.sync = JSON.stringify(localData.sync);
 	}
 }
 
