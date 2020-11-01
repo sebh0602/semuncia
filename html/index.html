@@ -128,7 +128,13 @@
 				</div>
 				<div>
 					<div class="settingsHeader">Delete all local data</div>
-					<button style="background-color: #cc0000;" onclick="deleteAllLocalData();">Delete all</button>
+					<button style="background-color: #cc0000;" onclick="deleteAllLocalData();">Delete local data</button>
+					<p>This will first disable synchronisation, then delete all local data. Data stored on the server will not be affected.</p>
+				</div>
+				<div>
+					<div class="settingsHeader">Delete remote data</div>
+					<button style="background-color: #cc0000;" onclick="deleteRemoteData();">Delete remote data</button>
+					<p>This will delete any data associated with this ID on the server. All instances with this ID will be disconnected from the server. Your local data will not be affected.</p>
 				</div>
 				<div>Find this project on <a href="https://github.com/sebh0602/semuncia" target="_blank">GitHub</a>.
 				</div>

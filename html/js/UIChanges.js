@@ -6,6 +6,7 @@ var listOfDisplays = {
 };
 
 function switchDisplay(newDisplay){
+	var oldDisplay = localData.config.currentDisplay;
 	if (newDisplay == "transactionsDisplay"){
 		loadListOfTransactions();
 	}
@@ -18,7 +19,9 @@ function switchDisplay(newDisplay){
 	}
 	listOfDisplays[newDisplay].style.display = "block";
 	localData.config.currentDisplay = newDisplay;
-	saveLocalData();
+	if (oldDisplay != newDisplay){ //prevent unnecessary saves when reloading data
+		saveLocalData();
+	}
 }
 
 function toggleSideNav(){

@@ -18,13 +18,20 @@ function deleteAllLocalData(){
 	if (prompt("Type DELETE to delete all local data.") != "DELETE"){
 		return;
 	}
+	if (localData.sync.syncActivated){
+		localData.sync.syncActivated = false;
+		wSocket.close()
+	}
 	localStorage.clear();
 	localData = {
 		config:{
 			currentDisplay:"settingsDisplay"
 		},
 		temp:{},
-		initialAmount:0
+		initialAmount:0,
+		sync:{
+			syncActivated:false
+		}
 	};
 
 	document.getElementById("sideNavStatsDisplay").innerHTML = "0.00";
@@ -35,4 +42,24 @@ function deleteAllLocalData(){
 
 	saveLocalData();
 	switchDisplay(localData.config.currentDisplay);
+}
+
+function deleteRemoteData(){
+	if (!localData.sync.syncActivated){
+		alert("Synchronisation is not activated.");
+		return;
+	}
+	if (prompt("Type DELETE to delete all remote data.") != "DELETE"){
+		return;
+	}
+	var payload = {
+		type: "push",
+		id:localData.sync.id,
+		data:undefined
+	};
+	console.log("Sent:");
+	console.log(payload);
+	wSocket.send(JSON.stringify(payload));
+	localData.sync.syncActivated = false,
+	wSocket.close();
 }

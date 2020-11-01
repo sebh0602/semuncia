@@ -9,3 +9,15 @@ so.
 
 ## back-end
 The back end will (probably) be a nginx server with nodejs.
+
+##protocol
+{
+	type: get, push, disconnect;
+	id: ID;
+	IV: (probably, depending on encryption scheme);
+	data: data, undefined
+}
+
+###details
+Client pushes undefined data: Delete. Server does not forward to other sessions. Server tells other clients to disconnect.
+Server pushes undefined data: (Response to client get.) The server does not yet have data. The client responds by pushing data.

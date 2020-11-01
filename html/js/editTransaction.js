@@ -21,5 +21,5 @@ function deleteTransaction(){
 	transactionScroll = 0;
 	switchDisplay(localData.config.currentDisplay);
 	loadStats();
-	hideAddTransactionPopup();
+	hideAllPopups();
 }

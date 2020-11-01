@@ -27,6 +27,12 @@ function init(){
 		};
 	}
 	localData.temp = {};
+
+	if (localData.sync.syncActivated){
+		establishConnection();
+	}
+	setInterval(checkSocket, 1000);
+
 	loadStats();
 	saveLocalData();
 	switchDisplay(localData.config.currentDisplay);
@@ -47,6 +53,21 @@ function saveLocalData(){
 	}
 	if (localData.sync != undefined){
 		localStorage.sync = JSON.stringify(localData.sync);
+	}
+	if (localData.sync.syncActivated && (localData.temp.firstConnection === false)){
+		var payload = {
+			type: "push",
+			id:localData.sync.id,
+			data:encrypt(JSON.stringify({
+				config:localData.config,
+				transactions:localData.transactions,
+				initialAmount:localData.initialAmount,
+				recurringTransactions:localData.recurringTransactions
+			}))
+		};
+		console.log("Sent:");
+		console.log(payload);
+		wSocket.send(JSON.stringify(payload));
 	}
 }
 
