@@ -20,6 +20,7 @@ function deleteAllLocalData(){
 	}
 	if (localData.sync.syncActivated){
 		localData.sync.syncActivated = false;
+		removeKey();
 		wSocket.close()
 	}
 	localStorage.clear();
@@ -60,6 +61,8 @@ function deleteRemoteData(){
 	console.log("Sent:");
 	console.log(payload);
 	wSocket.send(JSON.stringify(payload));
-	localData.sync.syncActivated = false,
+	localData.sync.syncActivated = false;
+	removeKey();
 	wSocket.close();
+	saveLocalData();
 }

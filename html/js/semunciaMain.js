@@ -58,16 +58,14 @@ function saveLocalData(){
 		var payload = {
 			type: "push",
 			id:localData.sync.id,
-			data:encrypt(JSON.stringify({
+			data:JSON.stringify({
 				config:localData.config,
 				transactions:localData.transactions,
 				initialAmount:localData.initialAmount,
 				recurringTransactions:localData.recurringTransactions
-			}))
+			})
 		};
-		console.log("Sent:");
-		console.log(payload);
-		wSocket.send(JSON.stringify(payload));
+		sendMessage(payload);
 	}
 }
 

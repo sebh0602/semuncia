@@ -1,9 +1,8 @@
 const WebSocket = require("ws");
 const wss = new WebSocket.Server({port:8080, maxPayload:5000000});
-var fs = require("fs");
+const fs = require("fs");
 
 var clientInstances = {};
-var fakeDB = {};
 
 function run(){
 	wss.on("connection", function connection(ws){
@@ -41,10 +40,12 @@ function getHandler(ws, message){
 		console.log(clientInstances[message.id].length);
 		ws.send(JSON.stringify(payload));
 	} else{
+		var file = fs.readFileSync("data/" + message.id).toString();
 		var payload = {
 			type:"push",
 			id:message.id,
-			data:fs.readFileSync("data/" + message.id).toString()
+			iv:file.split("\n")[0],
+			data:file.split("\n")[1]
 		};
 		console.log("Sent:");
 		print(payload);
@@ -58,12 +59,13 @@ function pushHandler(ws, message){
 		if (!fs.existsSync("data")){
     		fs.mkdirSync("data");
 		}
-		fs.writeFileSync("data/" + message.id, message.data);
+		fs.writeFileSync("data/" + message.id, message.iv + "\n" + message.data);
 		for (webSock of clientInstances[message.id]){
 			if (webSock != ws){
 				var payload = {
 					type:"push",
 					id:message.id,
+					iv:message.iv,
 					data:message.data
 				};
 				console.log("Sent:");

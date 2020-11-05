@@ -16,15 +16,19 @@ function syncInvertToggle(){
 				editId();
 			}
 		}
-		establishConnection();
+		storeKey().then(function(){
+			establishConnection()
+		});
 	}
 
 	localData.sync.syncActivated = !localData.sync.syncActivated;
-	localStorage.sync = JSON.stringify(localData.sync); //not the full save, so it doesn't get in the way of connection establishment
 
 	if (!localData.sync.syncActivated){
 		wSocket.close();
+		removeKey();
 	}
+
+	localStorage.sync = JSON.stringify(localData.sync); //not the full save, so it doesn't get in the way of connection establishment
 }
 
 function syncToggleHandler(){
@@ -99,44 +103,50 @@ function onSocketOpen(event){
 			type: "get",
 			id:localData.sync.id
 		};
-		console.log("Sent:");
-		console.log(payload);
-		wSocket.send(JSON.stringify(payload));
+		sendMessage(payload);
 		localData.temp.firstConnection = false;
 	}
 }
 
 function messageParser(event){
 	var message = JSON.parse(event.data);
-	console.log("Received:")
-	console.log(message);
 	if (message.type == "push"){
 		if (message.data != undefined){
-			var result = JSON.parse(decrypt(message.data));
-			if ("transactions" in result){
-				localData.transactions = result.transactions;
-				transactionScroll = 0;
-			}
-			if ("initialAmount" in result){
-				localData.initialAmount = result.initialAmount;
-			}
-			if ("recurringTransactions" in result){
-				localData.recurringTransactions = result.recurringTransactions;
-			}
-			if ("config" in result){
-				localData.config = result.config;
-			}
-			loadStats();
-			localData.temp.firstConnection = true; //so saveLocalData doesn't immediately push the data again
-			saveLocalData();
-			switchDisplay(localData.config.currentDisplay);
-			localData.temp.firstConnection = false;
+			decrypt(message.data, new Uint8Array(atob(message.iv).split(","))).then(function(result){
+				var dec = new TextDecoder();
+				var result = JSON.parse(dec.decode(result));
+				if ("transactions" in result){
+					localData.transactions = result.transactions;
+					transactionScroll = 0;
+				}
+				if ("initialAmount" in result){
+					localData.initialAmount = result.initialAmount;
+				}
+				if ("recurringTransactions" in result){
+					localData.recurringTransactions = result.recurringTransactions;
+				}
+				if ("config" in result){
+					localData.config = result.config;
+				}
+				loadStats();
+				localData.temp.firstConnection = true; //so saveLocalData doesn't immediately push the data again
+				saveLocalData();
+				switchDisplay(localData.config.currentDisplay);
+				localData.temp.firstConnection = false;
+			},function(error){
+				localData.sync.syncActivated = false;
+				wSocket.close();
+				removeKey();
+				syncToggleHandler();
+				alert("Incorrect password!");
+			});
 		} else{
 			saveLocalData();
 		}
 	} else if (message.type == "disconnect"){
 		localData.sync.syncActivated = false;
 		wSocket.close();
+		removeKey();
 		syncToggleHandler();
 	}
 }
@@ -150,12 +160,120 @@ function checkSocket(){
 	}
 }
 
-function encrypt(data){
-	return data;
+async function sendMessage(payload){
+	if (payload.data == undefined){
+		try{
+			wSocket.send(JSON.stringify(payload));
+		}catch(err){
+			console.log(err);
+			console.log("Attempting recovery...");
+			setTimeout(function(){
+				sendMessage(payload);
+			},500);
+		}
+	} else {
+		var iv = window.crypto.getRandomValues(new Uint8Array(12));
+		var encryptedData = await encrypt(payload.data, iv);
+		payload.iv = btoa(iv);
+		var base64Data = btoa(new Uint8Array(encryptedData));
+		payload.data = base64Data;
+		try{
+			wSocket.send(JSON.stringify(payload));
+		}catch(err){
+			console.log(err);
+			console.log("Attempting recovery...");
+			setTimeout(function(){
+				sendMessage(payload);
+			},500);
+		}
+	}
 }
 
-function decrypt(data){
-	return data;
+async function encrypt(data, iv){
+	var enc = new TextEncoder();
+	data = enc.encode(data);
+	return window.crypto.subtle.encrypt(
+		{
+			name: "AES-GCM",
+    		iv: iv,
+			additionalData:enc.encode(JSON.stringify({iv:iv,id:localData.sync.id}))
+      	},
+		await readKey(),
+		data
+	);
+}
+
+async function decrypt(data, iv){
+	var binData = new Uint8Array(atob(data).split(","));
+	var enc = new TextEncoder();
+	var p = window.crypto.subtle.decrypt(
+		{
+			name: "AES-GCM",
+    		iv: iv,
+			additionalData:enc.encode(JSON.stringify({iv:iv,id:localData.sync.id}))
+      	},
+		await readKey(),
+		binData
+	);
+	return p;
+}
+
+async function storeKey(){
+	var password = document.getElementById("syncPasswordInput").value;
+    var enc = new TextEncoder();
+    var impKey = await window.crypto.subtle.importKey(
+		"raw",
+		enc.encode(password),
+    	"PBKDF2",
+    	false,
+    	["deriveKey"]
+    );
+	var key = await window.crypto.subtle.deriveKey(
+	    {
+	    	"name": "PBKDF2",
+	    	salt: enc.encode(localData.sync.id),
+	    	"iterations": 256,
+	    	"hash": "SHA-256"
+	    },
+	    impKey,
+	    { "name": "AES-GCM", "length": 256},
+	    false,
+	    [ "encrypt", "decrypt" ]
+	);
+
+	var request = indexedDB.open("keyDB", 1);
+	request.onupgradeneeded = function(event){
+		var db = event.target.result;
+		var objectStore = db.createObjectStore("keyStore");
+	}
+	request.onsuccess = function(event){
+		var db = event.target.result;
+		var keyStore = db.transaction("keyStore", "readwrite").objectStore("keyStore");
+		keyStore.put(key,"key");
+		document.getElementById("syncPasswordInput").value = "";
+	}
+}
+
+function readKey(){
+	var p = new Promise(function(resolve,reject){
+		var request = indexedDB.open("keyDB", 1);
+		request.onsuccess = async function(event){
+			var db = event.target.result;
+			db.transaction("keyStore").objectStore("keyStore").get("key").onsuccess = function(event){
+				resolve(event.target.result);
+			};
+		}
+	});
+	return p;
+}
+
+async function removeKey(){
+	var request = indexedDB.open("keyDB", 1);
+	request.onsuccess = function(event){
+		var db = event.target.result;
+		var keyStore = db.transaction("keyStore", "readwrite").objectStore("keyStore");
+		keyStore.delete("key");
+	}
 }
 
 function generateId(){
