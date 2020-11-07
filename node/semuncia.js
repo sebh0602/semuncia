@@ -7,22 +7,26 @@ var clientInstances = {};
 function run(){
 	wss.on("connection", function connection(ws){
 		ws.on("message", function incoming(message) {
-	    	message = JSON.parse(message);
-			if (!checkIdValidity(message.id)){
-				return;
-			}
-			console.log("Received:")
-			print(message);
-			if (clientInstances[message.id] == undefined){
-				clientInstances[message.id] = [ws];
-			} else if (!clientInstances[message.id].includes(ws)){
-				clientInstances[message.id].push(ws);
-			}
-			console.log(clientInstances[message.id].length);
-			if (message.type == "get"){
-				getHandler(ws, message);
-			}else if (message.type == "push"){
-				pushHandler(ws, message);
+			try{
+				message = JSON.parse(message);
+				if (!checkIdValidity(message.id)){
+					return;
+				}
+				console.log("Received:")
+				print(message);
+				if (clientInstances[message.id] == undefined){
+					clientInstances[message.id] = [ws];
+				} else if (!clientInstances[message.id].includes(ws)){
+					clientInstances[message.id].push(ws);
+				}
+				console.log(clientInstances[message.id].length);
+				if (message.type == "get"){
+					getHandler(ws, message);
+				}else if (message.type == "push"){
+					pushHandler(ws, message);
+				}
+			}catch(err){
+				console.log(err);
 			}
 		});
 	});
