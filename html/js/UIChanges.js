@@ -2,7 +2,8 @@ var listOfDisplays = {
 	"statsDisplay":document.getElementById("statsDisplay"),
 	"graphDisplay":document.getElementById("graphDisplay"),
 	"transactionsDisplay":document.getElementById("transactionsDisplay"),
-	"settingsDisplay":document.getElementById("settingsDisplay")
+	"settingsDisplay":document.getElementById("settingsDisplay"),
+	"legalDisplay":document.getElementById("legalDisplay")
 };
 
 function switchDisplay(newDisplay){
