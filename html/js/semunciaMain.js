@@ -5,11 +5,16 @@ function init(){
 		localData.config = JSON.parse(localStorage.config);
 	} else{
 		localData.config = {
-			currentDisplay:"statsDisplay"
+			currentDisplay:"statsDisplay",
+			filter:{
+				keywords:""
+			}
 		};
 	}
 	if (localStorage.transactions != undefined){
 		localData.transactions = JSON.parse(localStorage.transactions);
+	} else{
+		localData.transactions = {};
 	}
 	if (localStorage.initialAmount != undefined){
 		localData.initialAmount = JSON.parse(localStorage.initialAmount);

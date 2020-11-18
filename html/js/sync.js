@@ -117,7 +117,6 @@ function messageParser(event){
 				var result = JSON.parse(dec.decode(result));
 				if ("transactions" in result){
 					localData.transactions = result.transactions;
-					transactionScroll = 0;
 				}
 				if ("initialAmount" in result){
 					localData.initialAmount = result.initialAmount;
@@ -131,6 +130,7 @@ function messageParser(event){
 				loadStats();
 				localData.temp.firstConnection = true; //so saveLocalData doesn't immediately push the data again
 				saveLocalData();
+				transactionScroll = 0;
 				switchDisplay(localData.config.currentDisplay);
 				localData.temp.firstConnection = false;
 			},function(error){

@@ -45,6 +45,7 @@
 	<script src="js/editTransaction.js" defer></script>
 	<script src="js/settings.js" defer></script>
 	<script src="js/sync.js" defer></script>
+	<script src="js/filter.js" defer></script>
 	<script src="js/semunciaMain.js" defer></script>
 
 	<!--This is for the stupid IE-Detection thing to work-->
@@ -64,10 +65,10 @@
 	<!--[if IE]>
 		<br>
 		Unfortunately, this website does not work in Internet Explorer.<br>
-		I recommend using a good browser such as <a target="_blank" href="https://www.google.com/chrome/">Chrome</a> or <a target="_blank" href="https://www.mozilla.org/en-US/firefox/">Firefox</a>.<br>
+		I recommend using a good browser such as <a target="_blank" rel="noreferrer" href="https://www.google.com/chrome/">Chrome</a> or <a target="_blank" rel="noreferrer" href="https://www.mozilla.org/en-US/firefox/">Firefox</a>.<br>
 		If you are forced to use IE by your school or office, let it be known that my thoughts are with you.<br>
 		<br>
-		If you would like to complain about this, feel free to send me an email at <a target="_blank" href="mailto:i_am_using_a_terrible_browser@hietsch.net">i_am_using_a_terrible_browser@hietsch.net</a>.
+		If you would like to complain about this, feel free to send me an email at <a target="_blank" rel="noreferrer" href="mailto:i_am_using_a_terrible_browser@hietsch.net">i_am_using_a_terrible_browser@hietsch.net</a>.
 		<br>
 		<style>
 			#app{display: none;}
@@ -124,7 +125,7 @@
 			<div id="graphDisplay">
 				<div class="emptyNotice">No graph to display.</div>
 			</div>
-			<div id="transactionsDisplay" onscroll="scrollHandlerTD();">
+			<div id="transactionsDisplay" onscroll="scrollHandlerTD()">
 				<div class="emptyNotice">No transactions to display.</div>
 			</div>
 			<div id="settingsDisplay">
@@ -143,7 +144,7 @@
 					<button style="background-color: #cc0000;" onclick="deleteRemoteData();">Delete remote data</button>
 					<p>This will delete any data associated with this ID on the server. All instances with this ID will be disconnected from the server. Your local data will not be affected.</p>
 				</div>
-				<div>Find this project on <a href="https://github.com/sebh0602/semuncia" target="_blank">GitHub</a>.
+				<div>Find this project on <a href="https://github.com/sebh0602/semuncia" target="_blank" rel="noreferrer">GitHub</a>.
 				</div>
 			</div>
 			<div id="legalDisplay">
@@ -166,24 +167,24 @@
 						1190 Wien<br>
 						Österreich/Austria<br>
 						<br>
-						<a target="_blank" href="mailto:semuncia@hietsch.net">semuncia@hietsch.net</a>
+						<a target="_blank" rel="noreferrer" href="mailto:semuncia@hietsch.net">semuncia@hietsch.net</a>
 					</p>
 
 				<h1>semuncia open source license</h1>
-					<p>Semuncia is offered under the terms of the GNU General Public License v3.0. See below for full license. The source-code is freely available on <a target="_blank" href="https://github.com/sebh0602/semuncia">GitHub</a>.</p>
+					<p>Semuncia is offered under the terms of the GNU General Public License v3.0. See below for full license. The source-code is freely available on <a target="_blank" rel="noreferrer" href="https://github.com/sebh0602/semuncia">GitHub</a>.</p>
 
 				<h1>ws WebSocket library</h1>
-					<p>Semuncia uses <a target="_blank" href="https://github.com/websockets/ws">ws</a> in accordance with the MIT License. For a full copy of the MIT License, see below.</p>
+					<p>Semuncia uses <a target="_blank" rel="noreferrer" href="https://github.com/websockets/ws">ws</a> in accordance with the MIT License. For a full copy of the MIT License, see below.</p>
 
 				<h1>Roboto font</h1>
-					<p>Semuncia uses the <a target="_blank" href="https://fonts.google.com/specimen/Roboto#license">Roboto font</a> in accordance with the Apache License 2.0. For a full copy of the Apache License 2.0, see below.</p>
+					<p>Semuncia uses the <a target="_blank" rel="noreferrer" href="https://fonts.google.com/specimen/Roboto#license">Roboto font</a> in accordance with the Apache License 2.0. For a full copy of the Apache License 2.0, see below.</p>
 
 				<h1>GNU General Public License v3.0</h1>
 					<p>GNU GENERAL PUBLIC LICENSE</p>
 
 					<p>Version 3, 29 June 2007</p>
 
-	 				<p>Copyright (C) 2007 Free Software Foundation, Inc. <a target="_blank" href="http://fsf.org/">&lt;http://fsf.org/&gt;</a>
+	 				<p>Copyright (C) 2007 Free Software Foundation, Inc. <a target="_blank" rel="noreferrer" href="http://fsf.org/">&lt;http://fsf.org/&gt;</a>
 	 				Everyone is permitted to copy and distribute verbatim copies
 	 				of this license document, but changing it is not allowed.</p>
 
@@ -827,7 +828,7 @@
 					GNU General Public License for more details.</p>
 
 					<p>You should have received a copy of the GNU General Public License
-					along with this program.  If not, see <a target="_blank" href="http://www.gnu.org/licenses/">&lt;http://www.gnu.org/licenses/&gt;</a>.</p>
+					along with this program.  If not, see <a target="_blank" rel="noreferrer" href="http://www.gnu.org/licenses/">&lt;http://www.gnu.org/licenses/&gt;</a>.</p>
 
 					<p>Also add information on how to contact you by electronic and paper mail.</p>
 
@@ -846,14 +847,14 @@
 					<p>You should also get your employer (if you work as a programmer) or school,
 					if any, to sign a "copyright disclaimer" for the program, if necessary.
 					For more information on this, and how to apply and follow the GNU GPL, see
-					<a target="_blank" href="http://www.gnu.org/licenses/">&lt;http://www.gnu.org/licenses/&gt;</a>.</p>
+					<a target="_blank" rel="noreferrer" href="http://www.gnu.org/licenses/">&lt;http://www.gnu.org/licenses/&gt;</a>.</p>
 
 					<p>The GNU General Public License does not permit incorporating your program
 					into proprietary programs.  If your program is a subroutine library, you
 					may consider it more useful to permit linking proprietary applications with
 					the library.  If this is what you want to do, use the GNU Lesser General
 					Public License instead of this License.  But first, please read
-					<a target="_blank" href="http://www.gnu.org/philosophy/why-not-lgpl.html">&lt;http://www.gnu.org/philosophy/why-not-lgpl.html&gt;</a>.</p>
+					<a target="_blank" rel="noreferrer" href="http://www.gnu.org/philosophy/why-not-lgpl.html">&lt;http://www.gnu.org/philosophy/why-not-lgpl.html&gt;</a>.</p>
 
 				<h1>MIT License</h1>
 					<p>The MIT License (MIT)</p>
@@ -881,7 +882,7 @@
 				<h1>Apache License 2.0</h1>
 					<p>Apache License</p>
 					<p>Version 2.0, January 2004</p>
-					<p><a target="_blank" href="http://www.apache.org/licenses/">http://www.apache.org/licenses/</a></p>
+					<p><a target="_blank" rel="noreferrer" href="http://www.apache.org/licenses/">http://www.apache.org/licenses/</a></p>
 
 					<p>TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION</p>
 
@@ -1073,7 +1074,7 @@
 					you may not use this file except in compliance with the License.
 					You may obtain a copy of the License at</p>
 
-					<p><a target="_blank" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+					<p><a target="_blank" rel="noreferrer" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
 
 					<p>Unless required by applicable law or agreed to in writing, software
 					distributed under the License is distributed on an "AS IS" BASIS,
