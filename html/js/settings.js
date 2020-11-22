@@ -26,7 +26,13 @@ function deleteAllLocalData(){
 	localStorage.clear();
 	localData = {
 		config:{
-			currentDisplay:"settingsDisplay"
+			currentDisplay:"settingsDisplay",
+			filter:{
+				keywords:"",
+				searchMode:"and",
+				dateFrom:"",
+				dateTo:""
+			}
 		},
 		temp:{},
 		initialAmount:0,

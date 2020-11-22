@@ -138,9 +138,21 @@ function showSyncPopup(){
 	document.getElementById("addTransactionHoverButton").style.display = "none";
 }
 
+function showFilterPopup(){
+	document.getElementById("filterSearch").value = localData.config.filter.keywords;
+	setFilterRadioValue(localData.config.filter.searchMode);
+	document.getElementById("filterDateFrom").value = localData.config.filter.dateFrom;
+	document.getElementById("filterDateTo").value = localData.config.filter.dateTo;
+	document.getElementById("popupBackground").style.display = "block";
+	document.getElementById("filterPopup").style.display = "block";
+	document.getElementById("addTransactionHoverButton").style.display = "none";
+	document.getElementById("filterSearch").focus();
+}
+
 function hideAllPopups(){
 	document.getElementById("popupBackground").style.display = "none";
 	document.getElementById("addTransactionPopup").style.display = "none";
 	document.getElementById("syncPopup").style.display = "none";
+	document.getElementById("filterPopup").style.display = "none";
 	document.getElementById("addTransactionHoverButton").style.display = "flex";
 }

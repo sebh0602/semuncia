@@ -28,7 +28,7 @@ function loadMoreTransactions(start,end){
 	if (start == 0){
 		tdHTML = `<div id="transactionsDisplayFilter">
 			<input type="text" id="transactionsDisplayFilterSearch" placeholder="Search..." oninput="searchInputHandlerTD()" value="${localData.config.filter.keywords}">
-			<button>⌕</button>
+			<button onclick="showFilterPopup()">⌕</button>
 		</div>`;
 	}else{
 		tdHTML = "";

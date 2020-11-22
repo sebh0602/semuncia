@@ -7,7 +7,10 @@ function init(){
 		localData.config = {
 			currentDisplay:"statsDisplay",
 			filter:{
-				keywords:""
+				keywords:"",
+				searchMode:"and",
+				dateFrom:"",
+				dateTo:""
 			}
 		};
 	}
@@ -37,6 +40,14 @@ function init(){
 		establishConnection();
 	}
 	setInterval(checkSocket, 1000);
+	window.addEventListener("keydown",function (e) {
+		if (e.keyCode == 114 || (e.ctrlKey && e.keyCode == 70)) {
+			if (["statsDisplay","graphDisplay","transactionsDisplay"].includes(localData.config.currentDisplay)){
+				e.preventDefault();
+				showFilterPopup();
+			}
+		}
+	})
 
 	loadStats();
 	saveLocalData();

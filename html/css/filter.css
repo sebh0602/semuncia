@@ -1,0 +1,66 @@
+#filterPopup{
+	display: none;
+	position: fixed;
+	top:10vh;
+	left:0;
+	right:0;
+	z-index: 10;
+	background-color: white;
+	border: 1px solid #1e2749;
+	font-size: 1.5em;
+	transition: background-color 0.5s;
+}
+
+@media screen and (min-width: 800px){
+	#filterPopup{
+		left:calc(50vw - 400px);
+		right:calc(50vw - 400px);
+	}
+}
+
+#filterPopup #filterTop{
+	background-color: #a9bcd0;
+	display: flex;
+	justify-content: space-between;
+	line-height: 50px;
+}
+
+#filterPopup #filterTop div:nth-child(1){
+	height: 50px;
+	margin-left: 10px;
+}
+
+#filterPopup #filterTop div:nth-child(2){
+	height: 50px;
+	width:50px;
+	cursor: pointer;
+}
+
+#filterPopup #filterFirstLine{
+	padding: 10px;
+	display: flex;
+}
+
+#filterPopup #filterFirstLine input{
+	flex-grow:1;
+}
+
+#filterPopup #filterSecondLine{
+	padding: 10px;
+}
+
+#filterPopup #filterSecondLine span{
+	margin-right: 10px;
+}
+
+#filterPopup #filterThirdLine{
+	padding: 10px;
+}
+
+#filterPopup #filterSixthLine{
+	display: flex;
+}
+
+#filterPopup #filterSixthLine button{
+	flex-grow:1;
+}
