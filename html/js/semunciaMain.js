@@ -10,7 +10,9 @@ function init(){
 				keywords:"",
 				searchMode:"and",
 				dateFrom:"",
-				dateTo:""
+				dateTo:"",
+				amountFrom:"",
+				amountTo:""
 			}
 		};
 	}
@@ -154,6 +156,22 @@ function addSpaces(number){
 		arr[i] = " " + arr[i];
 	}
 	return arr.join("");
+}
+
+function cleanNumber(number){
+	if (number == undefined || number == ""){
+		return 0;
+	}
+	var arr = number.toString().split("");
+	var allowed = "01234567890.,";
+	var result = [];
+	for (i of arr){
+		if (allowed.includes(i)){
+			result.push(i);
+		}
+	}
+	result = result.join("").replace(",",".");
+	return parseFloat(result);
 }
 
 function getUnsortedTransactionArray(sortedTransactionArray){

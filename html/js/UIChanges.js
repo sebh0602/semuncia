@@ -93,7 +93,7 @@ function showAddTransactionPopup(){
 	if (transaction.amount != undefined){
 		amountInput.value = transaction.amount/100;
 	} else{
-		amountInput.value = "0.00";
+		amountInput.value = "";
 	}
 
 	addTransactionCategoryDisplayHandler();
@@ -141,8 +141,25 @@ function showSyncPopup(){
 function showFilterPopup(){
 	document.getElementById("filterSearch").value = localData.config.filter.keywords;
 	setFilterRadioValue(localData.config.filter.searchMode);
+
 	document.getElementById("filterDateFrom").value = localData.config.filter.dateFrom;
 	document.getElementById("filterDateTo").value = localData.config.filter.dateTo;
+
+	document.getElementById("filterAmountFrom").value = localData.config.filter.amountFrom/100;
+	document.getElementById("filterAmountTo").value = localData.config.filter.amountTo/100;
+	var aF = localData.config.filter.amountFrom
+	if (aF === ""){
+		document.getElementById("filterAmountFrom").value = aF;
+	} else{
+		document.getElementById("filterAmountFrom").value = aF/100;
+	}
+	var aT = localData.config.filter.amountTo;
+	if (aT === ""){
+		document.getElementById("filterAmountTo").value = aT;
+	} else{
+		document.getElementById("filterAmountTo").value = aT/100;
+	}
+
 	document.getElementById("popupBackground").style.display = "block";
 	document.getElementById("filterPopup").style.display = "block";
 	document.getElementById("addTransactionHoverButton").style.display = "none";

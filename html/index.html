@@ -1120,7 +1120,7 @@
 						</div>
 					</div>
 				</div>
-				<input type="number" min="0" step="0.01" value="0.00" id="addTransactionValueInput" oninput="if (localData.temp.popupMode == 'add'){localData.temp.newTransaction.amount = Math.round(this.value*100);}else{localData.temp.editTransaction.amount = Math.round(this.value*100);}" onkeyup="if (event.key == 'Enter'){addTransaction();}">
+				<input type="number" min="0" step="0.01" id="addTransactionValueInput" placeholder="0.00" oninput="if (localData.temp.popupMode == 'add'){localData.temp.newTransaction.amount = Math.round(cleanNumber(this.value)*100);}else{localData.temp.editTransaction.amount = Math.round(cleanNumber(this.value)*100);}" onkeyup="if (event.key == 'Enter'){addTransaction();}">
 			</div>
 			<div id="addTransactionFourthLine">
 			</div>
@@ -1179,6 +1179,7 @@
 			<div id="filterFirstLine">
 				<input type="text" id="filterSearch" placeholder="Search..." onkeyup="if (event.key == 'Enter'){applyFilter(); hideAllPopups();}">
 			</div>
+			<hr>
 			<div id="filterSecondLine">
 				<span>Search mode:</span>
 				<span>
@@ -1194,14 +1195,17 @@
 					<label for="filterSearchModeExact">exact</label>
 				</span>
 			</div>
+			<hr>
 			<div id="filterThirdLine">
-				<input type="date" id="filterDateFrom"> - <input type="date" id="filterDateTo">
+				Date: <input type="date" id="filterDateFrom"> - <input type="date" id="filterDateTo">
 			</div>
+			<hr>
 			<div id="filterFourthLine">
-				Amount
+				Amount: <input type="number" min="0" step="0.01" id="filterAmountFrom" placeholder="0.00"> - <input type="number" min="0" step="0.01" id="filterAmountTo" placeholder="0.00">
 			</div>
+			<hr>
 			<div id="filterFifthLine">
-				Type +-
+				[x] Filter by type (o==)
 			</div>
 			<div id="filterSixthLine">
 				<button onclick="applyFilter(); hideAllPopups();">Apply filter</button>

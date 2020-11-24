@@ -18,6 +18,16 @@
 	}
 }
 
+#filterPopup > div{
+	line-height: 2.5em;
+}
+
+#filterPopup > hr{
+	border-top: 1px solid #1e2749;
+	border-bottom: none;
+	width: 80%;
+}
+
 #filterPopup #filterTop{
 	background-color: #a9bcd0;
 	display: flex;
@@ -51,9 +61,22 @@
 
 #filterPopup #filterSecondLine span{
 	margin-right: 10px;
+	white-space: nowrap;
 }
 
 #filterPopup #filterThirdLine{
+	padding: 10px;
+}
+
+#filterPopup #filterFourthLine{
+	padding: 10px;
+}
+
+#filterPopup #filterFourthLine input{
+	width: 100px;
+}
+
+#filterPopup #filterFifthLine{
 	padding: 10px;
 }
 

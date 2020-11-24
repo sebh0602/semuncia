@@ -8,7 +8,7 @@ function setInitialAmount(){
 		return;
 	}
 	var newAmount = document.getElementById("settingsInitialAmountInput").value;
-	newAmount = Math.round(newAmount*100);
+	newAmount = Math.round(cleanNumber(newAmount)*100);
 	localData.initialAmount = newAmount;
 	saveLocalData();
 	loadStats();
@@ -31,7 +31,9 @@ function deleteAllLocalData(){
 				keywords:"",
 				searchMode:"and",
 				dateFrom:"",
-				dateTo:""
+				dateTo:"",
+				amountFrom:"",
+				amountTo:""
 			}
 		},
 		temp:{},
