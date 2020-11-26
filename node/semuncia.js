@@ -35,7 +35,7 @@ function run(){
 function getHandler(ws, message){
 	if (!fs.existsSync("data/" + message.id)){
 		var payload = {
-			type:"push",
+			type:"get",
 			id:message.id,
 			data:undefined
 		};

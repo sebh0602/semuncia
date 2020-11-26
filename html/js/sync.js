@@ -16,6 +16,7 @@ function syncInvertToggle(){
 				editId();
 			}
 		}
+		localData.sync.initialSetup = true;
 		storeKey().then(function(){
 			establishConnection()
 		});
@@ -104,45 +105,53 @@ function onSocketOpen(event){
 			id:localData.sync.id
 		};
 		sendMessage(payload);
-		localData.temp.firstConnection = false;
 	}
 }
 
 function messageParser(event){
 	var message = JSON.parse(event.data);
 	if (message.type == "push"){
-		if (message.data != undefined){
-			decrypt(message.data, new Uint8Array(atob(message.iv).split(","))).then(function(result){
-				var dec = new TextDecoder();
-				var result = JSON.parse(dec.decode(result));
-				if ("transactions" in result){
-					localData.transactions = result.transactions;
-				}
-				if ("initialAmount" in result){
-					localData.initialAmount = result.initialAmount;
-				}
-				if ("recurringTransactions" in result){
-					localData.recurringTransactions = result.recurringTransactions;
-				}
-				if ("config" in result){
-					localData.config = result.config;
-				}
-				loadStats();
-				localData.temp.firstConnection = true; //so saveLocalData doesn't immediately push the data again
-				saveLocalData();
-				transactionScroll = 0;
-				switchDisplay(localData.config.currentDisplay);
-				localData.temp.firstConnection = false;
-			},function(error){
-				localData.sync.syncActivated = false;
-				wSocket.close();
-				removeKey();
-				syncToggleHandler();
-				alert("Incorrect password!");
-			});
+		decrypt(message.data, new Uint8Array(atob(message.iv).split(","))).then(function(result){
+			var dec = new TextDecoder();
+			var result = JSON.parse(dec.decode(result));
+			if ("transactions" in result){
+				localData.transactions = result.transactions;
+			}
+			if ("initialAmount" in result){
+				localData.initialAmount = result.initialAmount;
+			}
+			if ("recurringTransactions" in result){
+				localData.recurringTransactions = result.recurringTransactions;
+			}
+			if ("config" in result){
+				localData.config = result.config;
+			}
+			loadStats();
+			localData.temp.firstConnection = true; //so saveLocalData doesn't immediately push the data again
+			saveLocalData();
+			transactionScroll = 0;
+			switchDisplay(localData.config.currentDisplay);
+			localData.temp.firstConnection = false;
+			localData.sync.initialSetup = false;
+		},function(error){
+			localData.sync.syncActivated = false;
+			wSocket.close();
+			removeKey();
+			syncToggleHandler();
+			alert("Incorrect password!");
+		});
+	} else if (message.type == "get"){
+		if (localData.sync.initialSetup){
+			localData.temp.firstConnection = false;
+			saveLocalData();
 		} else{
+			localData.sync.syncActivated = false;
+			localData.sync.initialSetup = false;
+			removeKey();
+			wSocket.close();
 			saveLocalData();
 		}
+		saveLocalData();
 	} else if (message.type == "disconnect"){
 		localData.sync.syncActivated = false;
 		wSocket.close();
@@ -232,7 +241,7 @@ async function storeKey(){
 	    {
 	    	"name": "PBKDF2",
 	    	salt: enc.encode(localData.sync.id),
-	    	"iterations": 256,
+	    	"iterations": 20000,
 	    	"hash": "SHA-256"
 	    },
 	    impKey,

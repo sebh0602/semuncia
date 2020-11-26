@@ -21,7 +21,7 @@ function deleteAllLocalData(){
 	if (localData.sync.syncActivated){
 		localData.sync.syncActivated = false;
 		removeKey();
-		wSocket.close()
+		wSocket.close();
 	}
 	localStorage.clear();
 	localData = {

@@ -20,4 +20,4 @@ The back end will (probably) be a nginx server with nodejs.
 
 ###details
 Client pushes undefined data: Delete. Server does not forward to other sessions. Server tells other clients to disconnect.
-Server pushes undefined data: (Response to client get.) The server does not yet have data. The client responds by pushing data.
+Server sends get: The server does not yet have data. The client responds by pushing data.
