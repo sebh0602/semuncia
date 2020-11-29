@@ -1,6 +1,9 @@
 //IDEA: Current balance Higher/lower/same as x% of days since FIRSTDATE
 //Current balance higher/lower/same as n number of days since FIRSTDATE
 
+//IDEA: first/last date where filter applies (number of day between)
+//IDEA: amount per day between first and last / amount per transaction
+
 //IDEA: check if current display is stats display. if not, only load sidebar number
 
 function loadStats(){
@@ -16,14 +19,26 @@ function loadStats(){
 		return;
 	}
 
+	//all transactions
 	var transactionDates = Object.keys(localData.transactions);
 	for (date of transactionDates){
 		for (transaction of localData.transactions[date]){
 			if (transaction["type"] == "+"){
 				current += transaction["amount"];
-				earned += transaction["amount"];
 			} else{
 				current -= transaction["amount"];
+			}
+		}
+	}
+
+	//filtered transactions
+	var filteredTransactions = filter(localData.transactions);
+	var filteredTransactionDates = Object.keys(filteredTransactions);
+	for (date of filteredTransactionDates){
+		for (transaction of filteredTransactions[date]){
+			if (transaction["type"] == "+"){
+				earned += transaction["amount"];
+			} else{
 				spent += transaction["amount"];
 			}
 			numberOfTransactions += 1;
@@ -31,7 +46,7 @@ function loadStats(){
 		numberOfDays += 1;
 	}
 
-	document.getElementById("sideNavStatsDisplay").innerHTML = ((current >= 0) ? "+":"-") + addDecimalSeparators(current);
+	document.getElementById("sideNavStatsDisplay").innerHTML = ((current >= 0) ? "+":"") + addDecimalSeparators(current);
 	if (current >= 0){
 		document.getElementById("sideNavStatsDisplay").style.backgroundColor = "#ccffcc";
 	} else{
@@ -40,10 +55,10 @@ function loadStats(){
 
 	var sdHTML = "";
 	var data = {
-		"Current balance":((current >= 0) ? "+":"-") + addDecimalSeparators(current),
+		"Current balance*":((current >= 0) ? "+":"") + addDecimalSeparators(current),
 		"Amount earned":"+" + addDecimalSeparators(earned),
 		"Amount spent":"-" + addDecimalSeparators(spent),
-		"Total":((current >= 0) ? "+":"-") + addDecimalSeparators(earned-spent),
+		"Total":((earned-spent >= 0) ? "+":"") + addDecimalSeparators(earned-spent),
 		"No. of transactions":numberOfTransactions,
 		"Days with transactions":numberOfDays
 	};

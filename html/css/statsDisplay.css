@@ -2,6 +2,10 @@
 	display: none;
 }
 
+#statsDisplay > span{
+	margin-left: 10px;
+}
+
 #statsDisplayInner{
 	display: flex;
 	flex-wrap: wrap;

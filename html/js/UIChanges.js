@@ -8,6 +8,9 @@ var listOfDisplays = {
 
 function switchDisplay(newDisplay){
 	var oldDisplay = localData.config.currentDisplay;
+	if (newDisplay == "statsDisplay"){
+		loadStats(); //add optional arg here for actual full recalc
+	}
 	if (newDisplay == "transactionsDisplay"){
 		loadListOfTransactions();
 	}
