@@ -1205,7 +1205,13 @@
 			</div>
 			<hr>
 			<div id="filterFifthLine">
-				[x] Filter by type (o==)
+			 	<input type="checkbox" id="filterTypeCheckbox"><label for="filterTypeCheckbox">Filter by type</label>
+				<div class="toggle" id="filterToggle" onclick="filterInvertToggle(); filterToggleHandler();">
+					<div class="toggleBackground">
+						<div class="toggleToggle firstOption" id="filterToggleToggle"></div>
+						<div class="toggleValueDisplay" id="filterToggleValueDisplay"></div>
+					</div>
+				</div>
 			</div>
 			<div id="filterSixthLine">
 				<button onclick="applyFilter(); hideAllPopups();">Apply filter</button>

@@ -27,14 +27,7 @@ function deleteAllLocalData(){
 	localData = {
 		config:{
 			currentDisplay:"settingsDisplay",
-			filter:{
-				keywords:"",
-				searchMode:"and",
-				dateFrom:"",
-				dateTo:"",
-				amountFrom:"",
-				amountTo:""
-			}
+			filter:localDataDefaultFilter
 		},
 		temp:{},
 		initialAmount:0,

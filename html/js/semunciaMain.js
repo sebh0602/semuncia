@@ -1,19 +1,24 @@
 var localData = {};
 
 function init(){
+	localDataDefaultFilter = {
+		keywords:"",
+		searchMode:"and",
+		dateFrom:"",
+		dateTo:"",
+		amountFrom:"",
+		amountTo:"",
+		type:""
+	};
 	if (localStorage.config != undefined){
 		localData.config = JSON.parse(localStorage.config);
+		if (localData.config.filter == undefined){
+			localData.config.filter = localDataDefaultFilter;
+		}
 	} else{
 		localData.config = {
 			currentDisplay:"statsDisplay",
-			filter:{
-				keywords:"",
-				searchMode:"and",
-				dateFrom:"",
-				dateTo:"",
-				amountFrom:"",
-				amountTo:""
-			}
+			filter:localDataDefaultFilter
 		};
 	}
 	if (localStorage.transactions != undefined){

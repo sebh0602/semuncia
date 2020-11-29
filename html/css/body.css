@@ -23,6 +23,11 @@ input[type=radio]{
 	min-height: 15px;
 }
 
+input[type=checkbox]{
+	min-width: 20px;
+	min-height: 20px;
+}
+
 button{
 	/*min-width: 48px;*/
 	min-height: 50px;

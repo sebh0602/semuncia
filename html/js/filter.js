@@ -14,10 +14,13 @@ function filter(unfilteredTransactions){
 						if (localData.config.filter.amountFrom === "" || localData.config.filter.amountFrom <= transaction.amount){
 							if (localData.config.filter.amountTo === "" || localData.config.filter.amountTo >= transaction.amount){
 
-								if (filteredTransactions[transaction.date] == undefined){
-									filteredTransactions[transaction.date] = [];
+								if (localData.config.filter.type === "" || localData.config.filter.type === transaction.type){
+
+									if (filteredTransactions[transaction.date] == undefined){
+										filteredTransactions[transaction.date] = [];
+									}
+									filteredTransactions[transaction.date].push(transaction);
 								}
-								filteredTransactions[transaction.date].push(transaction);
 							}
 						}
 					}
@@ -74,18 +77,27 @@ function applyFilter(){
 	localData.config.filter.searchMode = getFilterRadioValue();
 	localData.config.filter.dateFrom = document.getElementById("filterDateFrom").value;
 	localData.config.filter.dateTo = document.getElementById("filterDateTo").value;
+
 	var aF = document.getElementById("filterAmountFrom").value;
 	if (aF === ""){
 		localData.config.filter.amountFrom = aF;
 	} else{
 		localData.config.filter.amountFrom = Math.round(cleanNumber(aF)*100);
 	}
+
 	var aT = document.getElementById("filterAmountTo").value;
 	if (aT === ""){
 		localData.config.filter.amountTo = aT;
 	} else{
 		localData.config.filter.amountTo = Math.round(cleanNumber(aT)*100);
 	}
+
+	if (document.getElementById("filterTypeCheckbox").checked){
+		localData.config.filter.type = localData.temp.filterToggle;
+	} else {
+		localData.config.filter.type = "";
+	}
+
 	saveLocalData();
 	transactionScroll = 0;
 	switchDisplay(localData.config.currentDisplay);
@@ -99,6 +111,7 @@ function clearFilter(){
 	localData.config.filter.dateTo = "";
 	localData.config.filter.amountFrom = "";
 	localData.config.filter.amountTo = "";
+	localData.config.filter.type = "";
 	saveLocalData();
 	transactionScroll = 0;
 	switchDisplay(localData.config.currentDisplay);
@@ -120,5 +133,23 @@ function setFilterRadioValue(val){
 			document.getElementById(id).checked = true;
 			break;
 		}
+	}
+}
+
+function filterInvertToggle(){
+	if (localData.temp.filterToggle == "+"){
+		localData.temp.filterToggle = "-";
+	} else{
+		localData.temp.filterToggle = "+";
+	}
+}
+
+function filterToggleHandler(){
+	if (localData.temp.filterToggle == "+"){
+		document.getElementById("filterToggleToggle").className = "toggleToggle firstOption";
+		document.getElementById("filterToggleValueDisplay").innerHTML = "+";
+	} else {
+		document.getElementById("filterToggleToggle").className = "toggleToggle secondOption";
+		document.getElementById("filterToggleValueDisplay").innerHTML = "-";
 	}
 }

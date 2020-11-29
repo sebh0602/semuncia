@@ -159,6 +159,14 @@ function showFilterPopup(){
 	} else{
 		document.getElementById("filterAmountTo").value = aT/100;
 	}
+	if (localData.config.filter.type != ""){
+		localData.temp.filterToggle = localData.config.filter.type;
+		document.getElementById("filterTypeCheckbox").checked = true;
+	} else {
+		localData.temp.filterToggle = "+";
+		document.getElementById("filterTypeCheckbox").checked = false;
+	}
+	filterToggleHandler();
 
 	document.getElementById("popupBackground").style.display = "block";
 	document.getElementById("filterPopup").style.display = "block";
