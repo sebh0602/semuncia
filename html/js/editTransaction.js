@@ -18,7 +18,7 @@ function deleteTransaction(){
 	}
 	localData.editTransaction = undefined;
 	saveLocalData();
-	transactionScroll = 0;
+	localData.temp.transactionScroll = 0;
 	switchDisplay(localData.config.currentDisplay);
 	loadStats();
 	hideAllPopups();

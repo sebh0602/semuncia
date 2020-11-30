@@ -1,11 +1,9 @@
-var transactionScroll = 0; //-1: maximum reached, 0: not initialized, n: scrolled n number of dates
-
 function loadListOfTransactions(){
 	if (localData.transactions == undefined || Object.keys(localData.transactions).length == 0){
 		document.getElementById("transactionsDisplay").innerHTML = `<div class="emptyNotice">No transactions to display.</div>`;
 		return;
 	}
-	if (transactionScroll == 0){
+	if (localData.temp.transactionScroll == 0){
 		document.getElementById("transactionsDisplay").innerHTML = "";
 		loadMoreTransactions(0,50);
 	}
@@ -16,9 +14,9 @@ function loadMoreTransactions(start,end){
 	var transactionDates = Object.keys(filteredTransactions).sort().reverse();
 	if (end > transactionDates.length){
 		end = transactionDates.length;
-		transactionScroll = -1;
+		localData.temp.transactionScroll = -1;
 	} else{
-		transactionScroll += 50;
+		localData.temp.transactionScroll += 50;
 	}
 	transactionDates = transactionDates.slice(start,end);
 
@@ -59,8 +57,8 @@ function loadMoreTransactions(start,end){
 
 function scrollHandlerTD(event){
 	var td = document.getElementById("transactionsDisplay");
-	if (td.scrollHeight - td.clientHeight - td.scrollTop <= td.clientHeight && transactionScroll != -1){
-		loadMoreTransactions(transactionScroll,transactionScroll + 50);
+	if (td.scrollHeight - td.clientHeight - td.scrollTop <= td.clientHeight && localData.temp.transactionScroll != -1){
+		loadMoreTransactions(localData.temp.transactionScroll,localData.temp.transactionScroll + 50);
 	}
 }
 
@@ -70,7 +68,7 @@ function searchInputHandlerTD(event){
 	localData.config.filter.keywords = value;
 	localData.config.filter.cursorPos = pos;
 	saveLocalData();
-	transactionScroll = 0;
+	localData.temp.transactionScroll = 0;
 	switchDisplay(localData.config.currentDisplay);
 }
 

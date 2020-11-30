@@ -129,7 +129,7 @@ function messageParser(event){
 			loadStats();
 			localData.temp.firstConnection = true; //so saveLocalData doesn't immediately push the data again
 			saveLocalData();
-			transactionScroll = 0;
+			localData.temp.transactionScroll = 0;
 			switchDisplay(localData.config.currentDisplay);
 			localData.temp.firstConnection = false;
 			localData.sync.initialSetup = false;

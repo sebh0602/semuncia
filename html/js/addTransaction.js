@@ -22,7 +22,7 @@ function addTransaction(){
 		document.getElementById("addTransactionValueInput").value = "0.00";
 
 		saveLocalData();
-		transactionScroll = 0;
+		localData.temp.transactionScroll = 0;
 		switchDisplay(localData.config.currentDisplay);
 		loadStats();
 	} else{
@@ -46,7 +46,7 @@ function addTransaction(){
 		}
 
 		saveLocalData();
-		transactionScroll = 0;
+		localData.temp.transactionScroll = 0;
 		switchDisplay(localData.config.currentDisplay);
 		loadStats();
 		hideAllPopups();

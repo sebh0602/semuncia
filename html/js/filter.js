@@ -99,7 +99,7 @@ function applyFilter(){
 	}
 
 	saveLocalData();
-	transactionScroll = 0;
+	localData.temp.transactionScroll = 0;
 	switchDisplay(localData.config.currentDisplay);
 }
 
@@ -113,7 +113,7 @@ function clearFilter(){
 	localData.config.filter.amountTo = "";
 	localData.config.filter.type = "";
 	saveLocalData();
-	transactionScroll = 0;
+	localData.temp.transactionScroll = 0;
 	switchDisplay(localData.config.currentDisplay);
 }
 

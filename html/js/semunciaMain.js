@@ -41,7 +41,9 @@ function init(){
 			syncActivated: false
 		};
 	}
-	localData.temp = {};
+	localData.temp = {
+		transactionScroll:0 //-1: maximum reached, 0: not initialized, n: scrolled n number of dates
+	};
 
 	if (localData.sync.syncActivated){
 		establishConnection();
@@ -98,7 +100,7 @@ function importJSON(){
 		var result = JSON.parse(event.target.result);
 		if ("transactions" in result){
 			localData.transactions = result.transactions;
-			transactionScroll = 0;
+			localData.temp.transactionScroll = 0;
 		}
 		if ("initialAmount" in result){
 			localData.initialAmount = result.initialAmount;

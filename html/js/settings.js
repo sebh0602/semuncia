@@ -59,8 +59,6 @@ function deleteRemoteData(){
 		id:localData.sync.id,
 		data:undefined
 	};
-	console.log("Sent:");
-	console.log(payload);
 	wSocket.send(JSON.stringify(payload));
 	localData.sync.syncActivated = false;
 	removeKey();
