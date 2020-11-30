@@ -8,7 +8,11 @@ function setInitialAmount(){
 		return;
 	}
 	var newAmount = document.getElementById("settingsInitialAmountInput").value;
-	newAmount = Math.round(cleanNumber(newAmount)*100);
+	if (newAmount.slice(0,1) == "-"){
+		newAmount = -1 * Math.round(cleanNumber(newAmount)*100);
+	} else{
+		newAmount = Math.round(cleanNumber(newAmount)*100);
+	}
 	localData.initialAmount = newAmount;
 	saveLocalData();
 	loadStats();
