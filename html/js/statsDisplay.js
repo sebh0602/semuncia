@@ -1,12 +1,7 @@
-//IDEA: Current balance Higher/lower/same as x% of days since FIRSTDATE
-//Current balance higher/lower/same as n number of days since FIRSTDATE
+//IDEA: check if current display is stats display. if not, only load sidebar number (actually args)
 
-//IDEA: first/last date where filter applies (number of day between)
-//IDEA: amount per day between first and last / amount per transaction
-
-//IDEA: check if current display is stats display. if not, only load sidebar number
-
-function loadStats(){
+function loadStats(doFullCalculation = false){
+	console.log("partial stats")
 	var current = 0;
 	var earned = 0;
 	var spent = 0;
@@ -31,6 +26,21 @@ function loadStats(){
 		}
 	}
 
+	document.getElementById("sideNavStatsDisplay").innerHTML = ((current >= 0) ? "+":"") + addDecimalSeparators(current);
+	if (current >= 0){
+		document.getElementById("sideNavStatsDisplay").style.backgroundColor = "#ccffcc";
+	} else{
+		document.getElementById("sideNavStatsDisplay").style.backgroundColor = "#ffcccc";
+	}
+
+	if (!doFullCalculation){
+		return;
+	}
+
+	/*
+	Start of full calculations
+	*/
+
 	//filtered transactions
 	var filteredTransactions = filter(localData.transactions);
 	var filteredTransactionDates = Object.keys(filteredTransactions);
@@ -46,29 +56,44 @@ function loadStats(){
 		numberOfDays += 1;
 	}
 
-	document.getElementById("sideNavStatsDisplay").innerHTML = ((current >= 0) ? "+":"") + addDecimalSeparators(current);
-	if (current >= 0){
-		document.getElementById("sideNavStatsDisplay").style.backgroundColor = "#ccffcc";
-	} else{
-		document.getElementById("sideNavStatsDisplay").style.backgroundColor = "#ffcccc";
-	}
+	var sdHTML = "<button onclick='showFilterPopup()'>⌕</button>"; //add html for filter button here
 
-	var sdHTML = "";
-	var data = {
-		"Current balance*":((current >= 0) ? "+":"") + addDecimalSeparators(current),
-		"Amount earned":"+" + addDecimalSeparators(earned),
-		"Amount spent":"-" + addDecimalSeparators(spent),
-		"Total":((earned-spent >= 0) ? "+":"") + addDecimalSeparators(earned-spent),
-		"No. of transactions":numberOfTransactions,
+	var data1 = {
+		"Current balance*":((current >= 0) ? "+":"") + addDecimalSeparators(current)
+	};
+
+	var data2 = {
+		"Amount earned":"+" + addDecimalSeparators(earned)
+	};
+
+	var data3 = {
+		"Amount spent":"-" + addDecimalSeparators(spent)
+	};
+
+	var data4 = {
+		"Total":((earned-spent >= 0) ? "+":"") + addDecimalSeparators(earned-spent)
+	};
+
+	var data5 = {
 		"Days with transactions":numberOfDays
 	};
 
-	for (datum in data){
-		sdHTML += `<div class="singleStat">
-			<div class="statDescriptor">${datum}</div>
-			<div class="statValue">${data[datum]}</div>
-		</div>`;
+	var data6 = {
+		"No. of transactions":numberOfTransactions
+	};
+
+	var sections = [data1, data2, data3, data4, data5, data6];
+
+	for (section of sections){
+		for (datum in section){
+			sdHTML += `<div class="singleStat">
+				<div class="statDescriptor">${datum}</div>
+				<div class="statValue">${section[datum]}</div>
+			</div>`;
+		}
+		sdHTML += "<hr>";
 	}
 
 	document.getElementById("statsDisplayInner").innerHTML = sdHTML;
+	console.log("full stats")
 }

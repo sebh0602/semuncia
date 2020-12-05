@@ -145,6 +145,15 @@ function addDecimalSeparators(cents){
 	if (cents == undefined){
 		return "?";
 	}
+
+	if (parseFloat(cents) < 0){
+		var negative = true;
+		cents = cents.toString();
+		cents = cents.slice(1,cents.length);
+	} else{
+		var negative = false;
+	}
+	
 	var arr = cents.toString().split("");
 	while (arr.length < 3){
 		arr.splice(0,0,"0");
@@ -154,7 +163,7 @@ function addDecimalSeparators(cents){
 	var withComma = arr.join("");
 	var splitByComma = withComma.split(".");
 	splitByComma[0] = addSpaces(splitByComma[0]);
-	return splitByComma.join(".");
+	return (negative ? "-" : "") + splitByComma.join(".");
 }
 
 function addSpaces(number){
