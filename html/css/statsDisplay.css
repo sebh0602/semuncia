@@ -3,21 +3,52 @@
 }
 
 #statsDisplay > span{
-	margin-left: 10px;
+	margin-left: 20px;
+	display: block;
+	margin-top: 20px;
 }
 
-#statsDisplayInner{
+#statsDisplayInner > hr{
+	border-top: 1px solid #1e2749;
+	border-bottom: none;
+	width: 80%;
+}
+
+
+
+#statsDisplayInner > button{
+	display: block;
+	margin: 10px;
+	position: absolute;
+	right: calc(10vw - 10px);
+	top:calc(5vh);
+}
+
+@media screen and (max-height:1000px){
+	#statsDisplayInner > button{
+		top:50px;
+	}
+}
+
+#statsDisplayInner .statsDataCollection:first-of-type{
+	margin-top: 60px;
+}
+
+
+
+#statsDisplayInner .statsDataCollection{
 	display: flex;
 	flex-wrap: wrap;
+	justify-content: center;
 }
 
-#statsDisplayInner .singleStat{
+#statsDisplayInner .statsDataCollection .singleStat{
 	margin:10px;
 	padding: 10px;
 	border:1px solid #1e2749;
 }
 
-#statsDisplayInner .singleStat .statValue{
+#statsDisplayInner .statsDataCollection .singleStat .statValue{
 	text-align: right;
 	font-size: 1.5em;
 	margin-top: 5px;

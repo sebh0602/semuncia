@@ -29,7 +29,7 @@ input[type=checkbox]{
 }
 
 button{
-	/*min-width: 48px;*/
+	min-width: 50px;
 	min-height: 50px;
 	background-color: #1e2749;
 	color:white;

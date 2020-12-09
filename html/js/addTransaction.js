@@ -6,7 +6,7 @@ function addTransaction(){
 			localData.temp.newTransaction.title = "";
 		}
 		if (localData.temp.newTransaction.amount == undefined){
-			localData.temp.newTransaction.amount = "0";
+			localData.temp.newTransaction.amount = 0;
 		}
 
 		var date = localData.temp.newTransaction.date;
