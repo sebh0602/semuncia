@@ -43,7 +43,6 @@ function deleteAllLocalData(){
 	document.getElementById("sideNavStatsDisplay").innerHTML = "0.00";
 	document.getElementById("sideNavStatsDisplay").style.backgroundColor = "#ffffff";
 	document.getElementById("statsDisplayInner").innerHTML = "<div class='emptyNotice'>No statistics to display.</div>";
-	document.getElementById("graphDisplay").innerHTML = "<div class='emptyNotice'>No graph to display.</div>";
 	document.getElementById("transactionsDisplay").innerHTML = "<div class='emptyNotice'>No transactions to display.</div>";
 
 	saveLocalData();

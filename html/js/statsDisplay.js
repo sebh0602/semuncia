@@ -75,7 +75,7 @@ function loadStats(doFullCalculation = false){
 	var data1 = {
 		"Current balance*":((current >= 0) ? "+":"") + addDecimalSeparators(current),
 		"Current balance lower/same/higher than on ... days":`${currentBalanceComparison[0]}/${currentBalanceComparison[1]}/${currentBalanceComparison[2]}`,
-		"Current balance lower/same/higher than on ...% of days":`${Math.round(currentBalanceComparison[0]/totalDays*10000)/100}/${Math.round(currentBalanceComparison[1]/totalDays*10000)/100}/${Math.round(currentBalanceComparison[2]/totalDays*10000)/100}`
+		"Current balance lower/same/higher than on ...% of days":`${Math.round(currentBalanceComparison[0]/totalDays*1000)/10}/${Math.round(currentBalanceComparison[1]/totalDays*1000)/10}/${Math.round(currentBalanceComparison[2]/totalDays*1000)/10}`
 	};
 
 	var data2 = {

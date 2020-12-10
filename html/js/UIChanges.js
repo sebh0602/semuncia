@@ -11,6 +11,12 @@ function switchDisplay(newDisplay){
 	if (newDisplay == "statsDisplay"){
 		loadStats(true); //true specifies full recalc
 	}
+	if (newDisplay == "graphDisplay"){
+		setTimeout( //otherwise the width/height of the canvas are incorrect
+			loadGraph,
+			1
+		);
+	}
 	if (newDisplay == "transactionsDisplay"){
 		loadListOfTransactions();
 	}

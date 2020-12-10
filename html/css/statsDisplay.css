@@ -1,5 +1,8 @@
 #statsDisplay{
 	display: none;
+	height: 95vh;
+	max-height: calc(100vh - 50px); /*50px because header*/
+	overflow-y: auto;
 }
 
 #statsDisplay > span{

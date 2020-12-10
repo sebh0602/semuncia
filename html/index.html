@@ -41,6 +41,7 @@
 
 	<script src="js/UIChanges.js" defer></script>
 	<script src="js/statsDisplay.js" defer></script>
+	<script src="js/graphDisplay.js" defer></script>
 	<script src="js/transactionsDisplay.js" defer></script>
 	<script src="js/addTransaction.js" defer></script>
 	<script src="js/editTransaction.js" defer></script>
@@ -125,7 +126,15 @@
 				<span>*Not affected by filter</span>
 			</div>
 			<div id="graphDisplay">
-				<div class="emptyNotice">No graph to display.</div>
+				<div id="graphTop">
+					<select id="graphSelect">
+						<option value="blance">Balance graph</option>
+						<option value="change">Change graph</option>
+						<option value="frequency">Frequency graph</option>
+					</select>
+					<button onclick='showFilterPopup()'>⌕</button>
+				</div>
+				<canvas id="canvas"></canvas>
 			</div>
 			<div id="transactionsDisplay" onscroll="scrollHandlerTD()">
 				<div class="emptyNotice">No transactions to display.</div>

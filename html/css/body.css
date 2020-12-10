@@ -28,6 +28,12 @@ input[type=checkbox]{
 	min-height: 20px;
 }
 
+select{
+	min-width: 50px;
+	min-height: 50px;
+	font-size: 1em;
+}
+
 button{
 	min-width: 50px;
 	min-height: 50px;
