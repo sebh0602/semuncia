@@ -1,9 +1,40 @@
 function loadGraph(){
-	drawGraph(calculateGraph());
+	var graphMode = document.getElementById("graphSelect").value;
+	drawGraph(calculateGraph(graphMode));
 }
 
-function calculateGraph(){
-	var transactionDates = Object.keys(localData.transactions).sort();
+function calculateGraph(graphMode){
+	if (graphMode == "balance"){
+		return calculateBalanceGraph();
+	} else{
+		return [
+			[
+				[0,0],
+				[1,1],
+				[2,1.5]
+			],
+			[
+				["y", 1],
+				["x", 0.5]
+			],
+			[
+				["semuncia", 1.05, 0.05],
+				["semuncia", 0, 0.0],
+			]
+		];
+	}
+}
+
+function calculateBalanceGraph(){
+	var transactions = localData.transactions;
+	var transactionDates = [];
+	for (date in transactions){ //this is just for determining if the filter is active
+		if (localData.config.filter.dateFrom == "" || (new Date(localData.config.filter.dateFrom) - new Date(date)) < 1){
+			if (localData.config.filter.dateTo == "" || (new Date(date) - new Date(localData.config.filter.dateTo)) < 1){
+				transactionDates.push(date);
+			}
+		}
+	}
 	var filteredTransactions = filter(localData.transactions);
 	var filteredTransactionDates = Object.keys(filteredTransactions).sort();
 	if (filteredTransactionDates.length != transactionDates.length){
@@ -11,15 +42,26 @@ function calculateGraph(){
 	} else {
 		var filterActive = false;
 	}
-	var currentDate = new Date();
+
+	transactionDates = Object.keys(localData.transactions).sort();
+
+	if (localData.config.filter.dateTo != ""){
+		var endDate = new Date(localData.config.filter.dateTo);
+	} else {
+		var endDate = new Date();
+	}
 	var iterDate = new Date(transactionDates[0]);
 	var iso = "";
 	var iterBalance = localData.initialAmount;
-	var dayCount = 0;
+	var dayCount = 1;
 	var graphArray = [];
-	while (iterDate <= currentDate){
+
+	var prevIso = iterDate.toISOString().split("T")[0];
+	var grid = [];
+	var labels = [];
+	while (iterDate <= endDate){
 		iso = iterDate.toISOString().split("T")[0];
-		dayCount += 1;
+
 		if (transactionDates.includes(iso)){
 			for (transaction of localData.transactions[iso]){
 				if (transaction["type"] == "+"){
@@ -30,23 +72,53 @@ function calculateGraph(){
 			}
 		}
 
-		if (filterActive && filteredTransactionDates.includes(iso)){
-			graphArray.push([dayCount,iterBalance,"#578700"]);
-		} else{
-			graphArray.push([dayCount,iterBalance]);
+		if (localData.config.filter.dateFrom == "" || (new Date(localData.config.filter.dateFrom) - iterDate) < 1){
+			if (localData.config.filter.dateTo == "" || (iterDate - new Date(localData.config.filter.dateTo)) < 1){
+				if (filterActive && filteredTransactionDates.includes(iso)){
+					graphArray.push([dayCount,iterBalance,"#578700"]);
+				} else{
+					graphArray.push([dayCount,iterBalance]);
+				}
+			}
 		}
 
+		if (iso.split("-")[0] != prevIso.split("-")[0]){
+			grid.push(["y",dayCount - 0.5]);
+			labels.push([iso.split("-")[0],dayCount - 0.5,"top"]);
+		}
+
+		dayCount += 1;
 		iterDate.setDate(iterDate.getDate() + 1);
+		prevIso = iso;
 	}
-	return graphArray;
+
+	return [graphArray, grid, labels];
 }
 
 function drawGraph(input){
+	switch(input.length){
+		case 0:
+			return;
+			break;
+		case 1:
+			input = input[0];
+			break;
+		case 2:
+			var grid = input[1];
+			input = input[0];
+			break;
+		case 3:
+			var grid = input[1];
+			var labels = input[2];
+			input = input[0];
+			break;
+	}
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 	if (input.length < 2){
+		console.log("INPUT TOO SHORT")
 		//TODO: Add "no graph" notice and size accordingly
 	}
 
@@ -69,18 +141,19 @@ function drawGraph(input){
 			maxY = i[1];
 		}
 	}
-	canvas.width = 2*canvas.clientWidth;
+	canvas.width = 4*canvas.clientWidth;
 	var inputWidth = maxX - minX;
 	localData.temp.graph.xScale = canvas.width / inputWidth;
 	localData.temp.graph.xOffset = minX * (-1); //xOffset needs to be added to all raw x-Values
 
-	canvas.height = 2*canvas.clientHeight;
+	canvas.height = 4*canvas.clientHeight;
 	localData.temp.graph.canvasHeight = canvas.height;
 	var inputHeight = (maxY - minY) * 1.2;
 	localData.temp.graph.yScale = canvas.height / inputHeight;
-	localData.temp.graph.yOffset = minY * (-1) + (maxY - minY + 1)*0.1;
+	localData.temp.graph.yOffset = minY * (-1) + ((minY < 0) ? (inputHeight / 12) : 0); //Make offset dependent on pos/neg values in graph
 
 	ctx.lineJoin = "round";
+	ctx.lineCap = "round";
 
 	var coord;
 	for (var i = 1; i < input.length; i++){
@@ -90,14 +163,62 @@ function drawGraph(input){
 		ctx.beginPath();
 		if (coord.length > 2){
 			ctx.strokeStyle = coord[2];
-			ctx.lineWidth = 6;
+			ctx.lineWidth = 15;
 		} else{
 			ctx.strokeStyle = "#000888";
-			ctx.lineWidth = 2;
+			ctx.lineWidth = 5;
 		}
 		ctx.moveTo(grX(prevCoord[0]),grY(prevCoord[1]));
 		ctx.lineTo(grX(coord[0]),grY(coord[1]));
 		ctx.stroke();
+	}
+
+	if (typeof grid != "undefined"){
+		for (line of grid){
+			coord = line[1];
+			ctx.beginPath();
+			ctx.strokeStyle = "#1e2749";
+			ctx.lineWidth = 3;
+
+			if (line[0] == "x"){
+				ctx.moveTo(grX(minX),grY(coord));
+				ctx.lineTo(grX(maxX),grY(coord));
+			} else{
+				ctx.moveTo(grX(coord),grY(minY));
+				ctx.lineTo(grX(coord),grY(maxY*1.2));
+			}
+			ctx.stroke();
+		}
+	}
+
+	if (typeof labels != "undefined"){
+		drawLabels(labels, ctx, minX, maxX, minY, inputHeight); //otherwise the font would not be loaded yet
+	}
+}
+
+function drawLabels(labels, ctx, minX, maxX, minY, inputHeight){
+	if (!document.fonts.check("80px Roboto")){
+		setTimeout(
+			function (){
+				drawLabels(labels, ctx, minX, maxX, minY, inputHeight);
+			},
+			10
+		);
+		return;
+	}
+
+	var x, y;
+	ctx.font = "80px Roboto";
+	ctx.fillStyle = "#1e2749";
+	for (label of labels){
+		x = label[1];
+		y = label[2];
+		if (y == "top"){
+			y = ((minY < 0) ? (inputHeight*11/12) : (inputHeight));
+		}
+		if (grX(x) + ctx.measureText(label[0]).width + 10 < grX(maxX) && x > minX){ //so it doesn't get cut off
+			ctx.fillText(label[0], grX(x) + 10, grY(y) + 90);
+		}
 	}
 }
 

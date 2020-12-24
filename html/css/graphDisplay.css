@@ -23,8 +23,8 @@
 	display: block;
 	margin-left:auto;
 	margin-right:auto;
-	border: 1px solid #1e2749;
-	background-color: #f0f0f0;
+	border: 3px solid #1e2749;
+	background-color: #f8f8f8;
 }
 
 @media screen and (max-height:1000px){
