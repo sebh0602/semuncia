@@ -45,6 +45,16 @@ function calculateBalanceGraph(){
 
 	transactionDates = Object.keys(localData.transactions).sort();
 
+	var startDate;
+	if (filteredTransactionDates.length != 0){ //otherwise there are issues with the vertical lines
+		startDate = filteredTransactionDates[0];
+	} else if (localData.config.filter.dateFrom != ""){
+		startDate = localData.config.filter.dateFrom;
+	} else{
+		startDate = transactionDates[0];
+	}
+	startDate = new Date(startDate);
+
 	if (localData.config.filter.dateTo != ""){
 		var endDate = new Date(localData.config.filter.dateTo);
 	} else {
@@ -59,7 +69,25 @@ function calculateBalanceGraph(){
 	var prevIso = iterDate.toISOString().split("T")[0];
 	var grid = [];
 	var labels = [];
-	while (iterDate <= endDate){
+
+	var years = (endDate - startDate)/365.2425/86400/1000;
+	var yearSpace = document.getElementById("canvas").clientWidth*4/220;
+	var months = (endDate - startDate)/30.44/86400/1000;
+	var monthSpace = document.getElementById("canvas").clientWidth*4/330;
+	var days = (endDate - startDate)/86400/1000;
+	var daySpace = document.getElementById("canvas").clientWidth*4/480;
+
+	if (days <= daySpace){
+		var gridSpacing = "days";
+	}else if (months <= monthSpace){
+		var gridSpacing = "months";
+	} else if (years <= yearSpace){
+		var gridSpacing = "years";
+	} else{
+		var gridSpacing = "none";
+	}
+
+	while ((endDate - iterDate) >= -7200000){ //strange number because of DST stuff
 		iso = iterDate.toISOString().split("T")[0];
 
 		if (transactionDates.includes(iso)){
@@ -72,19 +100,26 @@ function calculateBalanceGraph(){
 			}
 		}
 
-		if (localData.config.filter.dateFrom == "" || (new Date(localData.config.filter.dateFrom) - iterDate) < 1){
-			if (localData.config.filter.dateTo == "" || (iterDate - new Date(localData.config.filter.dateTo)) < 1){
-				if (filterActive && filteredTransactionDates.includes(iso)){
-					graphArray.push([dayCount,iterBalance,"#578700"]);
-				} else{
-					graphArray.push([dayCount,iterBalance]);
-				}
+		if (localData.config.filter.dateFrom == "" || (new Date(localData.config.filter.dateFrom) - iterDate) < 1){ //end date taken care of by endDate in loop
+			if (filterActive && filteredTransactionDates.includes(iso)){
+				graphArray.push([dayCount,iterBalance,"#578700"]);
+			} else{
+				graphArray.push([dayCount,iterBalance]);
+			}
+		}
+		if (iso.split("-")[1] != prevIso.split("-")[1]){ //month change
+			if (iso.split("-")[0] != prevIso.split("-")[0] && gridSpacing == "years"){ //year change
+				grid.push(["y",dayCount - 0.5]);
+				labels.push([iso.split("-")[0],dayCount - 0.5,"top"]);
+			} else if (gridSpacing == "months"){
+				grid.push(["y",dayCount - 0.5]);
+				labels.push([iso.split("-").splice(0,2).join("-"),dayCount - 0.5,"top"]);
 			}
 		}
 
-		if (iso.split("-")[0] != prevIso.split("-")[0]){
+		if (gridSpacing == "days"){
 			grid.push(["y",dayCount - 0.5]);
-			labels.push([iso.split("-")[0],dayCount - 0.5,"top"]);
+			labels.push([iso,dayCount - 0.5,"top"]);
 		}
 
 		dayCount += 1;
@@ -216,8 +251,8 @@ function drawLabels(labels, ctx, minX, maxX, minY, inputHeight){
 		if (y == "top"){
 			y = ((minY < 0) ? (inputHeight*11/12) : (inputHeight));
 		}
-		if (grX(x) + ctx.measureText(label[0]).width + 10 < grX(maxX) && x > minX){ //so it doesn't get cut off
-			ctx.fillText(label[0], grX(x) + 10, grY(y) + 90);
+		if (grX(x) + ctx.measureText(label[0]).width + 20 < grX(maxX) && x > minX){ //so it doesn't get cut off
+			ctx.fillText(label[0], grX(x) + 20, grY(y) + 90);
 		}
 	}
 }
