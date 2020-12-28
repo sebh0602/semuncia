@@ -6,6 +6,8 @@ function loadGraph(){
 function calculateGraph(graphMode){
 	if (graphMode == "balance"){
 		return calculateBalanceGraph();
+	} else if (graphMode == "change"){
+		return calculateChangeGraph();
 	} else{
 		return [
 			[
@@ -136,10 +138,10 @@ function calculateBalanceGraph(){
 	}
 
 	var range = (max - min);
-	var maxHorizontalLines = Math.round(document.getElementById("canvas").clientHeight*4 / 180);
+	var maxHorizontalLines = Math.round(document.getElementById("canvas").clientHeight*4 / 200);
 	var n = Math.ceil(Math.log10(range/maxHorizontalLines));
 	var spacing = Math.pow(10,n);
-	if (range/spacing*2 <= maxHorizontalLines){ //so it can do spacings like 50/500/5000...
+	if (range/spacing*2 <= maxHorizontalLines && spacing > 100){ //so it can do spacings like 50/500/5000...
 		spacing = spacing/2;
 	}
 
@@ -156,10 +158,110 @@ function calculateBalanceGraph(){
 	return [graphArray, grid, labels];
 }
 
+function calculateChangeGraph(){
+	var filteredTransactions = filter(localData.transactions);
+	var filteredTransactionDates = Object.keys(filteredTransactions).sort();
+	if (filteredTransactionDates.length < 2){
+		return [];
+	}
+	var startDate = filteredTransactionDates[0];
+	startDate = new Date(startDate);
+
+	var endDate = filteredTransactionDates[filteredTransactionDates.length - 1];
+	endDate = new Date(endDate);
+
+	var iterDate = startDate;
+	var iso = "";
+	var iterBalance = 0;
+	var dayCount = 1;
+	var graphArray = [];
+
+	var prevIso = iterDate.toISOString().split("T")[0];
+	var grid = [];
+	var labels = [];
+
+	var years = (endDate - startDate)/365.2425/86400/1000;
+	var yearSpace = document.getElementById("canvas").clientWidth*4/220;
+	var months = (endDate - startDate)/30.44/86400/1000;
+	var monthSpace = document.getElementById("canvas").clientWidth*4/330;
+	var days = (endDate - startDate)/86400/1000;
+	var daySpace = document.getElementById("canvas").clientWidth*4/480;
+
+	if (days <= daySpace){
+		var gridSpacing = "days";
+	}else if (months <= monthSpace){
+		var gridSpacing = "months";
+	} else if (years <= yearSpace){
+		var gridSpacing = "years";
+	} else{
+		var gridSpacing = "none";
+	}
+
+	var min = 0;
+	var max = 0;
+	while ((endDate - iterDate) >= -7200000){ //strange number because of DST stuff
+		iso = iterDate.toISOString().split("T")[0];
+
+		if (filteredTransactionDates.includes(iso)){
+			for (transaction of filteredTransactions[iso]){
+				if (transaction["type"] == "+"){
+					iterBalance += transaction["amount"];
+				} else{
+					iterBalance -= transaction["amount"];
+				}
+			}
+		}
+
+		graphArray.push([dayCount,iterBalance]);
+		if (iterBalance < min){
+			min = iterBalance;
+		} else if (iterBalance > max){
+			max = iterBalance;
+		}
+
+		if (iso.split("-")[1] != prevIso.split("-")[1]){ //month change
+			if (iso.split("-")[0] != prevIso.split("-")[0] && gridSpacing == "years"){ //year change
+				grid.push(["y",dayCount - 0.5]);
+				labels.push([iso.split("-")[0],dayCount - 0.5,"top"]);
+			} else if (gridSpacing == "months"){
+				grid.push(["y",dayCount - 0.5]);
+				labels.push([iso.split("-").splice(0,2).join("-"),dayCount - 0.5,"top"]);
+			}
+		}
+
+		if (gridSpacing == "days"){
+			grid.push(["y",dayCount - 0.5]);
+			labels.push([iso,dayCount - 0.5,"top"]);
+		}
+
+		dayCount += 1;
+		iterDate.setDate(iterDate.getDate() + 1);
+		prevIso = iso;
+	}
+
+	var range = (max - min);
+	var maxHorizontalLines = Math.round(document.getElementById("canvas").clientHeight*4 / 200);
+	var n = Math.ceil(Math.log10(range/maxHorizontalLines));
+	var spacing = Math.pow(10,n);
+	if (range/spacing*2 <= maxHorizontalLines && spacing > 100){ //so it can do spacings like 50/500/5000...
+		spacing = spacing/2;
+	}
+
+	for (var i = 0; i<=max; i+=spacing){ //positive values
+		grid.push(["x",i]);
+		labels.push([Math.round(i/100),"left",i]);
+	}
+	for (var i = -1; i>=min; i-=spacing){ //negative values
+		grid.push(["x",i]);
+		labels.push([Math.round(i/100),"left",i]);
+	}
+
+	return [graphArray, grid, labels];
+}
+
 function drawGraph(input){
 	switch(input.length){
 		case 0:
-			return;
 			break;
 		case 1:
 			input = input[0];
@@ -174,6 +276,7 @@ function drawGraph(input){
 			input = input[0];
 			break;
 	}
+
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -181,6 +284,7 @@ function drawGraph(input){
 	if (input.length < 2){
 		console.log("INPUT TOO SHORT")
 		//TODO: Add "no graph" notice and size accordingly
+		return;
 	}
 
 	if (localData.temp.graph == undefined){
@@ -245,23 +349,29 @@ function drawGraph(input){
 				ctx.moveTo(grX(minX),grY(coord));
 				ctx.lineTo(grX(maxX),grY(coord));
 			} else{
-				ctx.moveTo(grX(coord),grY(minY));
-				ctx.lineTo(grX(coord),grY(maxY*1.2));
+				var buffer = (maxY - minY)*0.1;
+				if (minY >= 0){
+					ctx.moveTo(grX(coord),grY(minY));
+					ctx.lineTo(grX(coord),grY(maxY + 2*buffer));
+				} else{
+					ctx.moveTo(grX(coord),grY(minY - buffer));
+					ctx.lineTo(grX(coord),grY(maxY + buffer));
+				}
 			}
 			ctx.stroke();
 		}
 	}
 
 	if (typeof labels != "undefined"){
-		drawLabels(labels, ctx, minX, maxX, minY, inputHeight); //otherwise the font would not be loaded yet
+		drawLabels(labels, ctx, minX, maxX, minY, maxY, inputHeight); //otherwise the font would not be loaded yet
 	}
 }
 
-function drawLabels(labels, ctx, minX, maxX, minY, inputHeight){
+function drawLabels(labels, ctx, minX, maxX, minY, maxY, inputHeight){
 	if (!document.fonts.check("80px Roboto")){
 		setTimeout(
 			function (){
-				drawLabels(labels, ctx, minX, maxX, minY, inputHeight);
+				drawLabels(labels, ctx, minX, maxX, minY, maxY, inputHeight);
 			},
 			10
 		);
@@ -271,11 +381,12 @@ function drawLabels(labels, ctx, minX, maxX, minY, inputHeight){
 	var x, y;
 	ctx.font = "80px Roboto";
 	ctx.fillStyle = "#1e2749";
+	var buffer = (maxY - minY)*0.1;
 	for (label of labels){
 		x = label[1];
 		y = label[2];
 		if (y == "top"){
-			y = ((minY < 0) ? (inputHeight*11/12) : (inputHeight));
+			y = ((minY < 0) ? (maxY + buffer) : (maxY + 2*buffer));
 		}
 		if (x == "left"){
 			x = minX;
