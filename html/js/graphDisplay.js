@@ -87,6 +87,8 @@ function calculateBalanceGraph(){
 		var gridSpacing = "none";
 	}
 
+	var min = 0;
+	var max = 0;
 	while ((endDate - iterDate) >= -7200000){ //strange number because of DST stuff
 		iso = iterDate.toISOString().split("T")[0];
 
@@ -106,7 +108,13 @@ function calculateBalanceGraph(){
 			} else{
 				graphArray.push([dayCount,iterBalance]);
 			}
+			if (iterBalance < min){
+				min = iterBalance;
+			} else if (iterBalance > max){
+				max = iterBalance;
+			}
 		}
+
 		if (iso.split("-")[1] != prevIso.split("-")[1]){ //month change
 			if (iso.split("-")[0] != prevIso.split("-")[0] && gridSpacing == "years"){ //year change
 				grid.push(["y",dayCount - 0.5]);
@@ -125,6 +133,24 @@ function calculateBalanceGraph(){
 		dayCount += 1;
 		iterDate.setDate(iterDate.getDate() + 1);
 		prevIso = iso;
+	}
+
+	var range = (max - min);
+	var maxHorizontalLines = Math.round(document.getElementById("canvas").clientHeight*4 / 180);
+	var n = Math.ceil(Math.log10(range/maxHorizontalLines));
+	var spacing = Math.pow(10,n);
+	if (range/spacing*2 <= maxHorizontalLines){ //so it can do spacings like 50/500/5000...
+		spacing = spacing/2;
+	}
+
+
+	for (var i = 0; i<=max; i+=spacing){ //positive values
+		grid.push(["x",i]);
+		labels.push([Math.round(i/100),"left",i]);
+	}
+	for (var i = -1; i>=min; i-=spacing){ //negative values
+		grid.push(["x",i]);
+		labels.push([Math.round(i/100),"left",i]);
 	}
 
 	return [graphArray, grid, labels];
@@ -251,7 +277,10 @@ function drawLabels(labels, ctx, minX, maxX, minY, inputHeight){
 		if (y == "top"){
 			y = ((minY < 0) ? (inputHeight*11/12) : (inputHeight));
 		}
-		if (grX(x) + ctx.measureText(label[0]).width + 20 < grX(maxX) && x > minX){ //so it doesn't get cut off
+		if (x == "left"){
+			x = minX;
+		}
+		if (grX(x) + ctx.measureText(label[0]).width + 20 < grX(maxX) && x >= minX){ //so it doesn't get cut off
 			ctx.fillText(label[0], grX(x) + 20, grY(y) + 90);
 		}
 	}
