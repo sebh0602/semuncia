@@ -5,25 +5,14 @@ function loadGraph(){
 
 function calculateGraph(graphMode){
 	if (graphMode == "balance"){
+		document.getElementById("graphResolutionContainer").style.display = "none";
 		return calculateBalanceGraph();
 	} else if (graphMode == "change"){
+		document.getElementById("graphResolutionContainer").style.display = "none";
 		return calculateChangeGraph();
-	} else{
-		return [
-			[
-				[0,0],
-				[1,1],
-				[2,1.5]
-			],
-			[
-				["y", 1],
-				["x", 0.5]
-			],
-			[
-				["semuncia", 1.05, 0.05],
-				["semuncia", 0, 0.0],
-			]
-		];
+	} else if (graphMode == "frequency"){
+		document.getElementById("graphResolutionContainer").style.display = "block";
+		return calculateFrequencyGraph();
 	}
 }
 
@@ -257,6 +246,148 @@ function calculateChangeGraph(){
 	}
 
 	return [graphArray, grid, labels];
+}
+
+function calculateFrequencyGraph(){
+	//first make a list with the daynumbers of all filtered transactions
+	//use this with the calc function for every x-pixel
+
+	//graph always starts on a whole number/day
+	//Whole day number in center of day. Day n goes from ]n-0.5;n+0.5[.
+	var filteredTransactions = filter(localData.transactions);
+	var filteredTransactionDates = Object.keys(filteredTransactions).sort();
+	if (filteredTransactionDates.length < 2){
+		return [];
+	}
+	var startDate = filteredTransactionDates[0];
+	startDate = new Date(startDate);
+
+	var endDate = filteredTransactionDates[filteredTransactionDates.length - 1];
+	endDate = new Date(endDate);
+
+	var iterDate = startDate;
+	var iso = "";
+	var dayCount = 0;
+
+	var prevIso = iterDate.toISOString().split("T")[0];
+	var grid = [];
+	var labels = [];
+	var frequencyDayList = [];
+	var graphArray = [];
+
+	var canvasWidth = document.getElementById("canvas").clientWidth*4;
+	var years = (endDate - startDate)/365.2425/86400/1000;
+	var yearSpace = canvasWidth/220;
+	var months = (endDate - startDate)/30.44/86400/1000;
+	var monthSpace = canvasWidth/330;
+	var days = (endDate - startDate)/86400/1000;
+	var daySpace = canvasWidth/480;
+
+	if (days <= daySpace){
+		var gridSpacing = "days";
+	}else if (months <= monthSpace){
+		var gridSpacing = "months";
+	} else if (years <= yearSpace){
+		var gridSpacing = "years";
+	} else{
+		var gridSpacing = "none";
+	}
+
+	var min = 0;
+	var max = 0;
+	while ((endDate - iterDate) >= -7200000){ //strange number because of DST stuff
+		iso = iterDate.toISOString().split("T")[0];
+
+		if (filteredTransactionDates.includes(iso)){
+			for (transaction of filteredTransactions[iso]){
+				frequencyDayList.push(dayCount);
+			}
+		}
+
+		if (iso.split("-")[1] != prevIso.split("-")[1]){ //month change
+			if (iso.split("-")[0] != prevIso.split("-")[0] && gridSpacing == "years"){ //year change
+				grid.push(["y",dayCount - 0.5]);
+				labels.push([iso.split("-")[0],dayCount - 0.5,"top"]);
+			} else if (gridSpacing == "months"){
+				grid.push(["y",dayCount - 0.5]);
+				labels.push([iso.split("-").splice(0,2).join("-"),dayCount - 0.5,"top"]);
+			}
+		}
+
+		if (gridSpacing == "days"){
+			grid.push(["y",dayCount - 0.5]);
+			labels.push([iso,dayCount - 0.5,"top"]);
+		}
+
+		dayCount += 1;
+		iterDate.setDate(iterDate.getDate() + 1);
+		prevIso = iso;
+	}
+
+	var x, y, a;
+	a = 1 + 500*Math.pow(0.85,parseInt(document.getElementById("graphResolution").value));
+	console.log(a)
+	var conversionFactor = dayCount / canvasWidth;
+	for (var i = 0; i <= canvasWidth; i++){
+		x = i*conversionFactor;
+		y = frequencyFunction(x, frequencyDayList, a);
+
+		graphArray.push([i,y]);
+
+		if (y < min){
+			min = y;
+		} else if (y > max){
+			max = y;
+		}
+	}
+
+	var val;
+	for (var i = 0; i<grid.length; i++){
+		val = grid[i];
+		val[1] = val[1]/conversionFactor;
+		grid[i] = val;
+	}
+
+	for (var i = 0; i<labels.length; i++){
+		val = labels[i];
+		val[1] = val[1]/conversionFactor;
+		labels[i] = val;
+	}
+
+	var range = (max - min);
+	var maxHorizontalLines = Math.round(document.getElementById("canvas").clientHeight*4 / 200);
+	var n = Math.ceil(Math.log10(range/maxHorizontalLines));
+	var spacing = Math.pow(10,n);
+	if (spacing < 1){
+		spacing = 1;
+	}
+	if (range/spacing*2 <= maxHorizontalLines && spacing > 1){ //so it can do spacings like 50/500/5000...
+		spacing = spacing/2;
+	}
+
+	for (var i = 0; i<=max; i+=spacing){ //positive values
+		grid.push(["x",i]);
+		labels.push([Math.round(i),"left",i]);
+	}
+	for (var i = -1; i>=min; i-=spacing){ //negative values
+		grid.push(["x",i]);
+		labels.push([Math.round(i),"left",i]);
+	}
+
+	return [graphArray, grid, labels];
+}
+
+function frequencyFunction(x, frequencyDayList, a){
+	//f(x) = Sum(i=1-->n, a^-(x-p_i)²)
+	var y = 0;
+	var exponent;
+	var val;
+	for (point of frequencyDayList){
+		exponent = (-1) * Math.pow(x-point, 2);
+		val = Math.pow(a,exponent);
+		y += val;
+	}
+	return y;
 }
 
 function drawGraph(input){

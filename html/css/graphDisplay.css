@@ -15,6 +15,14 @@
 	margin: 10px;
 }
 
+#graphDisplay #graphTop #graphResolutionContainer{
+	display: none;
+}
+
+#graphDisplay #graphTop #graphResolutionContainer #graphResolution{
+	width:200px;
+}
+
 #graphDisplay #canvas{
 	width:90%;
 	height:calc(100vh - 5vh - 70px - 10px - 25px);
