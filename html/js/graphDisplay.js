@@ -1,18 +1,18 @@
 function loadGraph(){
 	var graphMode = document.getElementById("graphSelect").value;
-	drawGraph(calculateGraph(graphMode));
+	calculateGraph(graphMode);
 }
 
 function calculateGraph(graphMode){
 	if (graphMode == "balance"){
 		document.getElementById("graphResolutionContainer").style.display = "none";
-		return calculateBalanceGraph();
+		drawGraph(calculateBalanceGraph());
 	} else if (graphMode == "change"){
 		document.getElementById("graphResolutionContainer").style.display = "none";
-		return calculateChangeGraph();
+		drawGraph(calculateChangeGraph());
 	} else if (graphMode == "frequency"){
 		document.getElementById("graphResolutionContainer").style.display = "block";
-		return calculateFrequencyGraph();
+		calculateFrequencyGraph();
 	}
 }
 
@@ -249,15 +249,15 @@ function calculateChangeGraph(){
 }
 
 function calculateFrequencyGraph(){
-	//first make a list with the daynumbers of all filtered transactions
-	//use this with the calc function for every x-pixel
+	if (localData.temp.graphWorkersRunning == true){
+		return;
+	}
 
-	//graph always starts on a whole number/day
-	//Whole day number in center of day. Day n goes from ]n-0.5;n+0.5[.
 	var filteredTransactions = filter(localData.transactions);
 	var filteredTransactionDates = Object.keys(filteredTransactions).sort();
 	if (filteredTransactionDates.length < 2){
-		return [];
+		drawGraph([]);
+		return;
 	}
 	var startDate = filteredTransactionDates[0];
 	startDate = new Date(startDate);
@@ -293,8 +293,6 @@ function calculateFrequencyGraph(){
 		var gridSpacing = "none";
 	}
 
-	var min = 0;
-	var max = 0;
 	while ((endDate - iterDate) >= -7200000){ //strange number because of DST stuff
 		iso = iterDate.toISOString().split("T")[0];
 
@@ -326,68 +324,93 @@ function calculateFrequencyGraph(){
 
 	var x, y, a;
 	a = 1 + 500*Math.pow(0.85,parseInt(document.getElementById("graphResolution").value));
-	console.log(a)
 	var conversionFactor = dayCount / canvasWidth;
-	for (var i = 0; i <= canvasWidth; i++){
-		x = i*conversionFactor;
-		y = frequencyFunction(x, frequencyDayList, a);
 
-		graphArray.push([i,y]);
+	localData.temp.graphWorkerArray = [];
+	localData.temp.graphMax = 0;
+	localData.temp.graphGrid = grid;
+	localData.temp.graphLabels = labels;
+	localData.temp.graphConversionFactor = conversionFactor;
 
-		if (y < min){
-			min = y;
-		} else if (y > max){
-			max = y;
-		}
-	}
-
-	var val;
-	for (var i = 0; i<grid.length; i++){
-		val = grid[i];
-		val[1] = val[1]/conversionFactor;
-		grid[i] = val;
-	}
-
-	for (var i = 0; i<labels.length; i++){
-		val = labels[i];
-		val[1] = val[1]/conversionFactor;
-		labels[i] = val;
-	}
-
-	var range = (max - min);
-	var maxHorizontalLines = Math.round(document.getElementById("canvas").clientHeight*4 / 200);
-	var n = Math.ceil(Math.log10(range/maxHorizontalLines));
-	var spacing = Math.pow(10,n);
-	if (spacing < 1){
-		spacing = 1;
-	}
-	if (range/spacing*2 <= maxHorizontalLines && spacing > 1){ //so it can do spacings like 50/500/5000...
-		spacing = spacing/2;
-	}
-
-	for (var i = 0; i<=max; i+=spacing){ //positive values
-		grid.push(["x",i]);
-		labels.push([Math.round(i),"left",i]);
-	}
-	for (var i = -1; i>=min; i-=spacing){ //negative values
-		grid.push(["x",i]);
-		labels.push([Math.round(i),"left",i]);
-	}
-
-	return [graphArray, grid, labels];
+	localData.temp.graphWorkersRunning = true;
+	var singleWorkerSlice = Math.ceil((canvasWidth + 1)/8);
+	worker1 = new Worker("js/graphDisplayWorker.js");
+	worker1.onmessage = function(e){graphWorkerMessageHandler(e,1)};
+	worker1.postMessage([0,singleWorkerSlice-1,frequencyDayList,a,conversionFactor]);
+	worker2 = new Worker("js/graphDisplayWorker.js");
+	worker2.onmessage = function(e){graphWorkerMessageHandler(e,2)};
+	worker2.postMessage([singleWorkerSlice,2*singleWorkerSlice-1,frequencyDayList,a,conversionFactor]);
+	worker3 = new Worker("js/graphDisplayWorker.js");
+	worker3.onmessage = function(e){graphWorkerMessageHandler(e,3)};
+	worker3.postMessage([2*singleWorkerSlice,3*singleWorkerSlice-1,frequencyDayList,a,conversionFactor]);
+	worker4 = new Worker("js/graphDisplayWorker.js");
+	worker4.onmessage = function(e){graphWorkerMessageHandler(e,4)};
+	worker4.postMessage([3*singleWorkerSlice,4*singleWorkerSlice-1,frequencyDayList,a,conversionFactor]);
+	worker5 = new Worker("js/graphDisplayWorker.js");
+	worker5.onmessage = function(e){graphWorkerMessageHandler(e,5)};
+	worker5.postMessage([4*singleWorkerSlice,5*singleWorkerSlice-1,frequencyDayList,a,conversionFactor]);
+	worker6 = new Worker("js/graphDisplayWorker.js");
+	worker6.onmessage = function(e){graphWorkerMessageHandler(e,6)};
+	worker6.postMessage([5*singleWorkerSlice,6*singleWorkerSlice-1,frequencyDayList,a,conversionFactor]);
+	worker7 = new Worker("js/graphDisplayWorker.js");
+	worker7.onmessage = function(e){graphWorkerMessageHandler(e,7)};
+	worker7.postMessage([6*singleWorkerSlice,7*singleWorkerSlice-1,frequencyDayList,a,conversionFactor]);
+	worker8 = new Worker("js/graphDisplayWorker.js");
+	worker8.onmessage = function(e){graphWorkerMessageHandler(e,8)};
+	worker8.postMessage([7*singleWorkerSlice,canvasWidth,frequencyDayList,a,conversionFactor]);
 }
 
-function frequencyFunction(x, frequencyDayList, a){
-	//f(x) = Sum(i=1-->n, a^-(x-p_i)²)
-	var y = 0;
-	var exponent;
-	var val;
-	for (point of frequencyDayList){
-		exponent = (-1) * Math.pow(x-point, 2);
-		val = Math.pow(a,exponent);
-		y += val;
+function graphWorkerMessageHandler(event,index){
+	localData.temp.graphWorkerArray[index - 1] = event.data[0];
+	if (event.data[1] > localData.temp.graphMax){
+		localData.temp.graphMax = event.data[1];
 	}
-	return y;
+	if (localData.temp.graphWorkerArray.length == 8 && !localData.temp.graphWorkerArray.includes(undefined)){
+		worker1.terminate();
+		worker2.terminate();
+		worker3.terminate();
+		worker4.terminate();
+		worker5.terminate();
+		worker6.terminate();
+		worker7.terminate();
+		worker8.terminate();
+		localData.temp.graphWorkersRunning = false;
+		var gwa = localData.temp.graphWorkerArray;
+		var graphArray = gwa[0].concat(gwa[1]).concat(gwa[2]).concat(gwa[3]).concat(gwa[4]).concat(gwa[5]).concat(gwa[6]).concat(gwa[7]);
+		localData.temp.graphWorkerArray = [];
+		var grid = localData.temp.graphGrid;
+		var labels = localData.temp.graphLabels;
+		var conversionFactor = localData.temp.graphConversionFactor;
+		var val;
+		for (var i = 0; i<grid.length; i++){
+			val = grid[i];
+			val[1] = val[1]/conversionFactor;
+			grid[i] = val;
+		}
+
+		for (var i = 0; i<labels.length; i++){
+			val = labels[i];
+			val[1] = val[1]/conversionFactor;
+			labels[i] = val;
+		}
+
+		var range = localData.temp.graphMax;
+		var maxHorizontalLines = Math.round(document.getElementById("canvas").clientHeight*4 / 200);
+		var n = Math.ceil(Math.log10(range/maxHorizontalLines));
+		var spacing = Math.pow(10,n);
+		if (spacing < 1){
+			spacing = 1;
+		}
+		if (range/spacing*2 <= maxHorizontalLines && spacing > 1){ //so it can do spacings like 50/500/5000...
+			spacing = spacing/2;
+		}
+
+		for (var i = 0; i<=localData.temp.graphMax; i+=spacing){ //positive values
+			grid.push(["x",i]);
+			labels.push([Math.round(i),"left",i]);
+		}
+		drawGraph([graphArray, grid, labels]);
+	}
 }
 
 function drawGraph(input){
