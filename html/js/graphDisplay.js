@@ -26,6 +26,9 @@ function calculateBalanceGraph(){
 			}
 		}
 	}
+	if (transactionDates.length < 2){
+		return [];
+	}
 	var filteredTransactions = filter(localData.transactions);
 	var filteredTransactionDates = Object.keys(filteredTransactions).sort();
 	if (filteredTransactionDates.length != transactionDates.length){
@@ -436,8 +439,18 @@ function drawGraph(input){
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 	if (input.length < 2){
-		console.log("INPUT TOO SHORT")
-		//TODO: Add "no graph" notice and size accordingly
+		canvas.width = 4*canvas.clientWidth;
+		canvas.height = 4*canvas.clientHeight;
+		ctx.stroke();
+		ctx.fillStyle = "#f8f8f8";
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+		localData.temp.graph = {};
+		localData.temp.graph.xOffset = 0;
+		localData.temp.graph.yOffset = 0;
+		localData.temp.graph.xScale = 1;
+		localData.temp.graph.yScale = 1;
+		localData.temp.graph.canvasHeight = 1000;
+		drawLabels([["No graph available","left",1000]], ctx, 0, 1000, 0, 1000, 1000);
 		return;
 	}
 
@@ -445,7 +458,7 @@ function drawGraph(input){
 		localData.temp.graph = {};
 	}
 
-	var minX = input[0][0], maxX = input[0][0], minY = 0, maxY = input[0][1];
+	var minX = input[0][0], maxX = input[0][0], minY = 0, maxY = 0;
 	for (i of input){
 		if (i[0] < minX){
 			minX = i[0];
