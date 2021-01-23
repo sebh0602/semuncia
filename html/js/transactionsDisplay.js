@@ -48,9 +48,9 @@ function loadMoreTransactions(start,end){
 		tdHTML += `</div>`;
 	}
 	document.getElementById("transactionsDisplay").innerHTML += tdHTML;
-	if (start == 0){
+	var pos = localData.config.filter.cursorPos;
+	if (start == 0 && pos != -1){
 		document.getElementById("transactionsDisplayFilterSearch").focus();
-		var pos = localData.config.filter.cursorPos;
 		document.getElementById("transactionsDisplayFilterSearch").setSelectionRange(pos, pos);
 	}
 }

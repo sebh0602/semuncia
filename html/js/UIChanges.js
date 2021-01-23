@@ -180,7 +180,10 @@ function showFilterPopup(){
 	document.getElementById("popupBackground").style.display = "block";
 	document.getElementById("filterPopup").style.display = "block";
 	document.getElementById("addTransactionHoverButton").style.display = "none";
-	document.getElementById("filterSearch").focus();
+
+	if (!(('ontouchstart' in window) || (navigator.maxTouchPoints > 0))){
+		document.getElementById("filterSearch").focus();
+	}
 }
 
 function hideAllPopups(){

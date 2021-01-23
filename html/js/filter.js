@@ -77,6 +77,7 @@ function applyFilter(){
 	localData.config.filter.searchMode = getFilterRadioValue();
 	localData.config.filter.dateFrom = document.getElementById("filterDateFrom").value;
 	localData.config.filter.dateTo = document.getElementById("filterDateTo").value;
+	localData.config.filter.cursorPos = -1; //so it doesn't focus on search bar
 
 	var aF = document.getElementById("filterAmountFrom").value;
 	if (aF === ""){
@@ -112,6 +113,7 @@ function clearFilter(){
 	localData.config.filter.amountFrom = "";
 	localData.config.filter.amountTo = "";
 	localData.config.filter.type = "";
+	localData.config.filter.cursorPos = -1; //so it doesn't focus on search bar
 	saveLocalData();
 	localData.temp.transactionScroll = 0;
 	switchDisplay(localData.config.currentDisplay);
