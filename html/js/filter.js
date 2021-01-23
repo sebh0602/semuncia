@@ -36,18 +36,33 @@ function filterKeywordsCheck(transaction, keywords, mode){
 		return true; //because no kw filter was set
 	}
 	if (mode == "exact"){
-		if (filterKeywordsSimpleCheck(transaction, keywords)){
+		if (filterKeywordsSimpleCheck(transaction, keywords, mode)){
 			return true;
 		}
-	} else if (mode == "or"){
+	}
+
+	var keywords2 = [];
+	for (kw of keywords.split(" ")){
+		if (!filterKeywordsNegativeCheck(transaction,kw)){
+			return false;
+		}
+		if (kw[0] != "-" && kw != ""){
+			keywords2.push(kw)
+		}
+	}
+	if (keywords2.length == 0){
+		return true;
+	}
+
+	if (mode == "or"){
 		for (kw of keywords.split(" ")){
-			if (kw != "" && filterKeywordsSimpleCheck(transaction, kw)){
+			if (kw != "" && filterKeywordsSimpleCheck(transaction, kw, mode)){
 				return true;
 			}
 		}
 	} else if (mode == "and"){
 		for (kw of keywords.split(" ")){
-			if (!filterKeywordsSimpleCheck(transaction, kw)){
+			if (!filterKeywordsSimpleCheck(transaction, kw, mode)){
 				return false;
 			}
 		}
@@ -56,19 +71,44 @@ function filterKeywordsCheck(transaction, keywords, mode){
 	return false;
 }
 
-function filterKeywordsSimpleCheck(transaction, keywords){
-	if (keywords == ""){
+function filterKeywordsSimpleCheck(transaction, keyword, mode){
+	if (keyword == ""){
 		return true; //because no kw filter was set
 	}
-	if (transaction.title.toLowerCase().includes(keywords)){
+	if (keyword[0] == "-"){ //because this is handled by another function
+		if (mode == "or"){
+			return false;
+		} else if (mode == "and"){
+			return true;
+		}
+	}
+	if (transaction.title.toLowerCase().includes(keyword)){
 		return true;
 	}
 	for (category of transaction.categories){
-		if (category.toLowerCase().includes(keywords)){
+		if (category.toLowerCase().includes(keyword)){
 			return true;
 		}
 	}
 	return false;
+}
+
+function filterKeywordsNegativeCheck(transaction, keyword){
+	if (keyword == "" || keyword == "-"){
+		return true;
+	}
+	if (keyword[0] == "-"){
+		keyword = keyword.slice(1,keyword.length);
+		if (transaction.title.toLowerCase().includes(keyword)){
+			return false;
+		}
+		for (category of transaction.categories){
+			if (category.toLowerCase().includes(keyword)){
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
 function applyFilter(){
