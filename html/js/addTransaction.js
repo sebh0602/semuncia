@@ -13,6 +13,8 @@ function addTransaction(){
 		if (localData.transactions[date] == undefined){
 			localData.transactions[date] = [];
 		}
+		delete localData.temp.newTransaction.categoryInput;
+
 		localData.transactions[date].push(localData.temp.newTransaction);
 
 		localData.temp.newTransaction = undefined;
@@ -38,6 +40,8 @@ function addTransaction(){
 		if (localData.transactions[newDate] == undefined){
 			localData.transactions[newDate] = [];
 		}
+		delete localData.temp.editTransaction.categoryInput;
+
 		localData.transactions[newDate].push(localData.temp.editTransaction);
 
 		localData.temp.editTransaction = undefined;

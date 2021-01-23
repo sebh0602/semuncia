@@ -50,7 +50,7 @@ function filterKeywordsCheck(transaction, keywords, mode){
 			keywords2.push(kw)
 		}
 	}
-	if (keywords2.length == 0){
+	if (keywords2.length == 0){ //because of searches containing only "-"-keywords
 		return true;
 	}
 
