@@ -126,7 +126,7 @@ function exportJSON(){
 		transactions:localData.transactions
 	};
 
-	var fileName = "semuncia_export_" + new Date().toISOString().split("T")[0] + ".json";
+	var fileName = "semuncia_export_" + getCurrentDate() + ".json";
 	var stringified = JSON.stringify(exportableJSON,null,"\t");
 	var blob = new Blob([stringified], {type:"application/json"});
 	var a = document.createElement("a");
@@ -198,6 +198,10 @@ function getUnsortedTransactionArray(sortedTransactionArray){
 		}
 	}
 	return unsorted;
+}
+
+function getCurrentDate(){
+	return new Date(Date.now() - (new Date().getTimezoneOffset()*60000)).toISOString().split("T")[0];
 }
 
 init();

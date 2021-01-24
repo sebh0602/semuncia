@@ -109,7 +109,7 @@ function showAddTransactionPopup(){
 	addTransactionToggleHandler();
 
 	if (dateInput.value == ""){
-		dateInput.value = new Date().toISOString().split("T")[0];
+		dateInput.value = getCurrentDate();
 		localData.temp.newTransaction.date = dateInput.value;
 	}
 	loadTitleAutocomplete();
