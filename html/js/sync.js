@@ -188,6 +188,7 @@ async function sendMessage(payload){
 		payload.data = base64Data;
 		try{
 			wSocket.send(JSON.stringify(payload));
+			localData.temp.saving = false;
 		}catch(err){
 			console.log(err);
 			console.log("Attempting recovery...");

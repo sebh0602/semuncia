@@ -56,7 +56,12 @@ function init(){
 				showFilterPopup();
 			}
 		}
-	})
+	});
+	window.onbeforeunload = function(){
+		if (localData.temp.saving){
+			return true;
+		}
+	}
 
 	loadStats();
 	saveLocalData();
@@ -64,6 +69,8 @@ function init(){
 }
 
 function saveLocalData(){
+	localData.temp.saving = true;
+
 	if (localData.transactions != undefined){
 		localStorage.transactions = JSON.stringify(localData.transactions);
 	}
@@ -91,6 +98,8 @@ function saveLocalData(){
 			})
 		};
 		sendMessage(payload);
+	} else {
+		localData.temp.saving = false;
 	}
 }
 
