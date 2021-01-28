@@ -9,3 +9,6 @@ The data is stored in the browser's local storage. If the json file is not
 synced with the server, it is not encrypted. Once the client communicates with
 the server, the json file is encrypted using AES256 (or similar) and a key
 derived from the password (eg. using pbkdf2).
+
+## server setup
+Access logging should be disabled on the webserver. Otherwise, an attacker may match ip-addresses with unique IDs through timestamp comparison.

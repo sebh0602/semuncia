@@ -25,4 +25,5 @@
 #legalDisplay > h1:first-child ~ ul > li > span{
 	color: #0000EE;
 	text-decoration: underline;
+	cursor: pointer;
 }
