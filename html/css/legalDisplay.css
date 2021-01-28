@@ -21,3 +21,8 @@
 	font-weight: 300;
 	margin-top: 50px;
 }
+
+#legalDisplay > h1:first-child ~ ul > li > span{
+	color: #0000EE;
+	text-decoration: underline;
+}

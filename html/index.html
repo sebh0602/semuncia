@@ -114,7 +114,7 @@
 					<div onclick="event.stopPropagation(); exportJSON(); toggleSideNav();" class="sideNavDropDownChild">Export</div>
 				</div>
 				<div onclick="switchDisplay('settingsDisplay'); toggleSideNav();">Settings</div>
-				<div onclick="switchDisplay('legalDisplay'); toggleSideNav();">Legal</div>
+				<div onclick="switchDisplay('legalDisplay'); toggleSideNav();">About/Legal</div>
 			</div>
 		</div>
 
@@ -165,17 +165,22 @@
 			<div id="legalDisplay">
 				<h1>Contents</h1>
 					<ul>
-						<li>Author/Contact</li>
-						<li>semuncia open source license</li>
-						<li>ws WebSocket library</li>
-						<li>Roboto font</li>
-						<li>GNU General Public License v3.0</li>
-						<li>MIT License</li>
-						<li>Apache License 2.0</li>
+						<li onclick="document.getElementById('legal-about').scrollIntoView(true);"><span>About</span></li>
+						<li onclick="document.getElementById('legal-author').scrollIntoView(true);"><span>Author/Contact</span></li>
+						<li onclick="document.getElementById('legal-semuncia').scrollIntoView(true);"><span>semuncia open source license</span></li>
+						<li onclick="document.getElementById('legal-ws').scrollIntoView(true);"><span>ws WebSocket library</span></li>
+						<li onclick="document.getElementById('legal-roboto').scrollIntoView(true);"><span>Roboto font</span></li>
+						<li onclick="document.getElementById('legal-gpl').scrollIntoView(true);"><span>GNU General Public License v3.0</span></li>
+						<li onclick="document.getElementById('legal-mit').scrollIntoView(true);"><span>MIT License</span></li>
+						<li onclick="document.getElementById('legal-apache').scrollIntoView(true);"><span>Apache License 2.0</span></li>
 					</ul>
 
-				<h1>Author/Contact</h1>
-					<p>Semuncia (and this website) is created by Sebastian Hietsch.</p>
+				<h1 id="legal-about">About</h1>
+					<p>Track your expenses, manage your finances and analyse your spending habits with semuncia.com. Just enter a new transaction whenever you earn or spend money and watch the statistics become ever more informative.</p>
+
+
+				<h1 id="legal-author">Author/Contact</h1>
+					<p>Semuncia (and this website) was created by Sebastian Hietsch.</p>
 					<p>
 						Sebastian Hietsch<br>
 						Kaasgrabengasse 64<br>
@@ -185,16 +190,16 @@
 						<a target="_blank" rel="noreferrer" href="mailto:semuncia@hietsch.net">semuncia@hietsch.net</a>
 					</p>
 
-				<h1>semuncia open source license</h1>
+				<h1 id="legal-semuncia">semuncia open source license</h1>
 					<p>Semuncia is offered under the terms of the GNU General Public License v3.0. See below for full license. The source-code is freely available on <a target="_blank" rel="noreferrer" href="https://github.com/sebh0602/semuncia">GitHub</a>.</p>
 
-				<h1>ws WebSocket library</h1>
+				<h1 id="legal-ws">ws WebSocket library</h1>
 					<p>Semuncia uses <a target="_blank" rel="noreferrer" href="https://github.com/websockets/ws">ws</a> in accordance with the MIT License. For a full copy of the MIT License, see below.</p>
 
-				<h1>Roboto font</h1>
+				<h1 id="legal-roboto">Roboto font</h1>
 					<p>Semuncia uses the <a target="_blank" rel="noreferrer" href="https://fonts.google.com/specimen/Roboto#license">Roboto font</a> in accordance with the Apache License 2.0. For a full copy of the Apache License 2.0, see below.</p>
 
-				<h1>GNU General Public License v3.0</h1>
+				<h1 id="legal-gpl">GNU General Public License v3.0</h1>
 					<p>GNU GENERAL PUBLIC LICENSE</p>
 
 					<p>Version 3, 29 June 2007</p>
@@ -871,7 +876,7 @@
 					Public License instead of this License.  But first, please read
 					<a target="_blank" rel="noreferrer" href="http://www.gnu.org/philosophy/why-not-lgpl.html">&lt;http://www.gnu.org/philosophy/why-not-lgpl.html&gt;</a>.</p>
 
-				<h1>MIT License</h1>
+				<h1 id="legal-mit">MIT License</h1>
 					<p>The MIT License (MIT)</p>
 
 					<p>Copyright (c) 2011 Einar Otto Stangvik &lt;einaros@gmail.com&gt;</p>
@@ -894,7 +899,7 @@
 					OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 					SOFTWARE.</p>
 
-				<h1>Apache License 2.0</h1>
+				<h1 id="legal-apache">Apache License 2.0</h1>
 					<p>Apache License</p>
 					<p>Version 2.0, January 2004</p>
 					<p><a target="_blank" rel="noreferrer" href="http://www.apache.org/licenses/">http://www.apache.org/licenses/</a></p>
