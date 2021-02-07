@@ -100,6 +100,7 @@ function establishConnection(){
 function onSocketOpen(event){
 	wSocket.onmessage = messageParser;
 	localData.temp.badConnection = false;
+	showOfflineNotice(false);
 	if (localStorage.saveOnConnection == "true"){
 		localData.temp.firstConnection = false; //otherwise saveLocalData won't save
 		saveLocalData();
@@ -167,8 +168,12 @@ function checkSocket(){
 		if (wSocket.readyState == WebSocket.CLOSED || wSocket.readyState == WebSocket.CLOSING){
 			console.log("Reconnecting...")
 			localData.temp.badConnection = true;
+			showOfflineNotice(true);
 			establishConnection();
 		}
+	} else{
+		localData.temp.badConnection = false;
+		showOfflineNotice(false);
 	}
 }
 

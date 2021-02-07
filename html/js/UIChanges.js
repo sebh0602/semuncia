@@ -34,6 +34,16 @@ function switchDisplay(newDisplay){
 	}
 }
 
+function showOfflineNotice(bool){
+	if (bool){
+		document.getElementById("offlineNotice").style.height = "60px";
+		document.getElementById("offlineNotice").style.fontSize = "1em";
+	} else{
+		document.getElementById("offlineNotice").style.height = "0px";
+		document.getElementById("offlineNotice").style.fontSize = "0px";
+	}
+}
+
 function toggleSideNav(){
 	if (document.getElementById("sideNav").style.display == "none" || document.getElementById("sideNav").style.display == ""){
 		document.getElementById("sideNav").style.display = "block";
