@@ -147,13 +147,11 @@ function messageParser(event){
 	} else if (message.type == "get"){
 		if (localData.sync.initialSetup){
 			localData.temp.firstConnection = false;
-			saveLocalData();
 		} else{
 			localData.sync.syncActivated = false;
 			localData.sync.initialSetup = false;
 			removeKey();
 			wSocket.close();
-			saveLocalData();
 		}
 		saveLocalData();
 	} else if (message.type == "disconnect"){

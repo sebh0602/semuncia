@@ -1,4 +1,4 @@
-var serviceWorkerVersion = 6; //increment to force update - do this on every commit
+var serviceWorkerVersion = 1; //increment to force update - do this on every commit
 var CACHE_NAME = 'cache-v1';
 var urlsToCache = [
 	"/",
