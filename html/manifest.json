@@ -1,0 +1,22 @@
+{
+	"short_name": "semuncia",
+	"icons": [
+	  {
+		"src": "/images/logo_192x192.png",
+		"type": "image/png",
+		"sizes": "192x192"
+	  },
+	  {
+		"src": "/images/logo_512x512.png",
+		"type": "image/png",
+		"sizes": "512x512"
+	  }
+	],
+	"start_url": "/",
+	"background_color": "#FFFFFF",
+	"display": "standalone",
+	"scope": "/",
+	"theme_color": "#000888",
+
+	"description": "Expense tracking and management"
+  }
