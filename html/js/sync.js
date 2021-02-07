@@ -18,7 +18,7 @@ function syncInvertToggle(){
 		}
 		localData.sync.initialSetup = true;
 		storeKey().then(function(){
-			establishConnection()
+			establishConnection();
 		});
 	}
 
@@ -99,7 +99,11 @@ function establishConnection(){
 
 function onSocketOpen(event){
 	wSocket.onmessage = messageParser;
-	if (localData.temp.firstConnection){
+	localData.temp.badConnection = false;
+	if (localStorage.saveOnConnection == "true"){
+		localData.temp.firstConnection = false; //otherwise saveLocalData won't save
+		saveLocalData();
+	} else if (localData.temp.firstConnection){
 		var payload = {
 			type: "get",
 			id:localData.sync.id
@@ -164,6 +168,7 @@ function checkSocket(){
 	if (localData.sync.syncActivated){
 		if (wSocket.readyState == WebSocket.CLOSED || wSocket.readyState == WebSocket.CLOSING){
 			console.log("Reconnecting...")
+			localData.temp.badConnection = true;
 			establishConnection();
 		}
 	}
@@ -189,6 +194,7 @@ async function sendMessage(payload){
 		try{
 			wSocket.send(JSON.stringify(payload));
 			localData.temp.saving = false;
+			localStorage.saveOnConnection = "false";
 		}catch(err){
 			console.log(err);
 			console.log("Attempting recovery...");

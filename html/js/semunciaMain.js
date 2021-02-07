@@ -91,20 +91,25 @@ function saveLocalData(){
 	if (localData.sync != undefined){
 		localStorage.sync = JSON.stringify(localData.sync);
 	}
-	if (localData.sync.syncActivated && (localData.temp.firstConnection === false)){
-		var payload = {
-			type: "push",
-			id:localData.sync.id,
-			data:JSON.stringify({
-				config:localData.config,
-				transactions:localData.transactions,
-				initialAmount:localData.initialAmount,
-				recurringTransactions:localData.recurringTransactions
-			})
-		};
-		sendMessage(payload);
-	} else {
+	if (localData.sync.syncActivated && localData.temp.badConnection){
+		localStorage.saveOnConnection = "true";
 		localData.temp.saving = false;
+	} else{
+		if (localData.sync.syncActivated && (localData.temp.firstConnection === false)){
+			var payload = {
+				type: "push",
+				id:localData.sync.id,
+				data:JSON.stringify({
+					config:localData.config,
+					transactions:localData.transactions,
+					initialAmount:localData.initialAmount,
+					recurringTransactions:localData.recurringTransactions
+				})
+			};
+			sendMessage(payload);
+		} else {
+			localData.temp.saving = false;
+		}
 	}
 }
 
