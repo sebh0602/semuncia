@@ -1,4 +1,4 @@
-var serviceWorkerVersion = 0; //increment to force update - do this on every commit
+var serviceWorkerVersion = "1.0.0"; //increment to force update
 var CACHE_NAME = 'cache-v1';
 var urlsToCache = [
 	"/",
@@ -44,7 +44,7 @@ var urlsToCache = [
 
 self.addEventListener('install', function(event) {
 	event.waitUntil(caches.open(CACHE_NAME).then(function(cache) {
-		console.log('Installing new worker');
+		console.log('Installing new worker. Version: ', serviceWorkerVersion);
 		return cache.addAll(urlsToCache);
 	})
   );

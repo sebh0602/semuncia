@@ -23,6 +23,7 @@ function loadMoreTransactions(start,end){
 	var date;
 	var tdHTML; //transactionsDisplay HTML
 	var transaction;
+	var index;
 	if (start == 0){
 		tdHTML = `<div id="transactionsDisplayFilter">
 			<input type="text" id="transactionsDisplayFilterSearch" placeholder="Search..." oninput="searchInputHandlerTD()" value="${localData.config.filter.keywords}">
@@ -33,7 +34,8 @@ function loadMoreTransactions(start,end){
 	}
 	for (date of transactionDates){
 		tdHTML += `<div class="dateContainer"><div class="date">${date} (${weekday(date)})</div>`;
-		for ([index, transaction] of filteredTransactions[date].entries()){
+		for (transaction of filteredTransactions[date]){
+			index = localData.transactions[date].indexOf(transaction);
 			tdHTML += `<div class="transaction ${transaction["type"] == "+" ? "positiveTransaction" : "negativeTransaction"}">
 				<div class="transactionLineOne">
 					<div>${transaction["title"]}</div><div onclick="editTransaction('${date}',${index})">&#8942;</div>
