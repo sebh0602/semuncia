@@ -1,4 +1,4 @@
-var serviceWorkerVersion = "1.0.1"; //increment to force update
+var serviceWorkerVersion = "1.0.2"; //increment to force update
 var CACHE_NAME = 'cache-v1';
 var urlsToCache = [
 	"/",
@@ -38,8 +38,11 @@ var urlsToCache = [
 	"/images/logo_96x96.png",
 	"/images/logo_152x152.png",
 	"/images/logo_192x192.png",
+	"/images/logo_192x192_maskable.png",
 	"/images/logo_196x196.png",
-	"/images/logo_228x228.png"
+	"/images/logo_228x228.png",
+	"/images/logo_512x512.png",
+	"/images/logo_512x512_maskable.png"
 ];
 
 self.addEventListener('install', function(event) {
