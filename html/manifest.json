@@ -18,6 +18,7 @@
 	"display": "standalone",
 	"scope": "/",
 	"theme_color": "#000888",
-
-	"description": "Expense tracking and management"
+	"orientation": "any",
+	"description": "Track your expenses, manage your finances and analyse your spending habits with semuncia.com. Just add a transaction whenever you spend or earn money and view informative statistics on your spending habits.",
+	"categories":["finance","business","utilities","productivity"]
   }

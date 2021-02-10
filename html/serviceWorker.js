@@ -1,4 +1,4 @@
-var serviceWorkerVersion = "1.0.0"; //increment to force update
+var serviceWorkerVersion = "1.0.1"; //increment to force update
 var CACHE_NAME = 'cache-v1';
 var urlsToCache = [
 	"/",
