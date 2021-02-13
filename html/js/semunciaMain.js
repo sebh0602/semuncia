@@ -62,6 +62,17 @@ function init(){
 			return true;
 		}
 	}
+	
+	history.pushState(null,"");
+	window.onpopstate = function(event){
+		if (isEverythingMinimized()){
+			history.back();
+		} else {
+			minimizeEverything();
+			history.pushState(null,"");
+		}
+	}
+
 	window.addEventListener("load", () => {
 		if ("serviceWorker" in navigator) {
 			navigator.serviceWorker.register("serviceWorker.js");

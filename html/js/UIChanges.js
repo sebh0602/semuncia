@@ -196,6 +196,23 @@ function showFilterPopup(){
 	}
 }
 
+function minimizeEverything(){
+	hideAllPopups();
+	if ((document.getElementById("sideNav").style.display != "none") && (document.getElementById("sideNav").style.display != "")){
+		toggleSideNav();
+	}
+}
+
+function isEverythingMinimized(){
+	if ((document.getElementById("sideNav").style.display != "none") && (document.getElementById("sideNav").style.display != "")){
+		return false;
+	}
+	if (document.getElementById("popupBackground").style.display == "block"){
+		return false;
+	}
+	return true;
+}
+
 function hideAllPopups(){
 	document.getElementById("popupBackground").style.display = "none";
 	document.getElementById("addTransactionPopup").style.display = "none";
